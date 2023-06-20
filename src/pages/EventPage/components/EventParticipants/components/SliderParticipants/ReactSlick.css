@@ -1,0 +1,16 @@
+.slick-track {
+  /* margin-left: unset !important;
+  margin-right: 5px !important; */
+  height: inherit !important;
+  margin-left: unset !important;
+  margin-right: 5px !important;
+
+}
+
+.slick-list {
+  height: inherit !important;
+}
+
+.slick-slider {
+  height: inherit !important;
+}

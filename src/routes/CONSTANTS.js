@@ -1,0 +1,13 @@
+export const ROOT = "/";
+export const LOGIN = "/login";
+export const ON_BOARDING = "/onBoarding";
+export const REGISTER = "/register";
+export const PASSWORD_REST = "/password_reset";
+export const INTERESTS = "/interests";
+export const DASHBOARD = "/dashboard";
+export const CREATE_EVENT = "/events/create";
+export const CALENDER = "/calendar";
+export const NOTIFICATION = "/notifications";
+export const FAVORITES = "/favorites";
+export const CALENDAR = "/calendar";
+export const EVENTS_REQUESTS = "/events_requests";

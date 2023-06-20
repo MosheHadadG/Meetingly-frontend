@@ -1,0 +1,12 @@
+.css-ze407f-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  color: var(--color-primary-purple) !important;
+}
+
+.css-pksjrw-MuiInputBase-root-MuiInput-root:after {
+  border-bottom: 2px solid var(--color-primary-purple) !important;
+
+}
+
+option {
+  direction: rtl !important;
+}

@@ -1,0 +1,23 @@
+.calender-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.calender-change-date {
+  width: 100%;
+
+}
+
+.calender-change-date input {
+  width: 11%;
+}
+
+.calender-main {
+  height: 500px;
+  width: 80%;
+  /* margin: 50px; */
+}

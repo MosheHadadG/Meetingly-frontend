@@ -1,0 +1,8 @@
+.css-1d7c71a-MuiButtonBase-root-MuiButton-root.OpenButton-textButton {
+  display: inline-flex !important;
+}
+
+
+.css-o6wehe-MuiButtonBase-root-MuiIconButton-root.NavigationButton-button {
+  transform: rotate(180deg) !important;
+}
