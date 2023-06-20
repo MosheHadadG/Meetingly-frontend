@@ -47,7 +47,7 @@ function LoginForm() {
       const userData = await login(loginForm).unwrap();
       const { user, token } = userData;
       dispatch(setCredentials({ user, token }));
-      dispatch(setSocket(io("http://localhost:5005")));
+      dispatch(setSocket(io("https://meetingly-socket.onrender.com")));
       if (userData.user.firstTimeUser) {
         await updateUser({ firstTimeUser: false });
         navigate(INTERESTS);

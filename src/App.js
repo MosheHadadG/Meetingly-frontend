@@ -56,7 +56,7 @@ function App() {
       // user is not logged in and have user data
 
       dispatch(setCredentials({ user: userData.user, token }));
-      dispatch(setSocket(io("http://localhost:5005")));
+      dispatch(setSocket(io("https://meetingly-socket.onrender.com")));
     } else if (userData && userLoggedIn) {
       // user already logged in and user data change
       dispatch(setUpdatedUser(userData.user));
