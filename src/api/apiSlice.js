@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setCredentials, logOut } from "../redux/slices/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/",
+  baseUrl: "https://meetingly-backend.onrender.com/",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {
