@@ -29,13 +29,12 @@ const theme = createTheme({
 });
 
 function ScheduleEvents({ events }) {
-  console.log(events);
   return (
     <S.Container>
       <ThemeProvider theme={theme}>
         <S.Scheduler>
           <Paper>
-            <Scheduler data={events} locale={"he"}>
+            <Scheduler data={events && events} locale={"he"}>
               <ViewState defaultCurrentDate={new Date()} />
               <MonthView />
               <Toolbar />

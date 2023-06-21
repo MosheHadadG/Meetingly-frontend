@@ -22,21 +22,25 @@ function CalendarPage() {
     if (isLoading) {
       return <Spinner />;
     } else if (isSuccess) {
-      const eventsToScheduleFormat = eventsUserParticipate.map((event) => {
-        return {
-          startDate: `${dayjs(event.date).format("YYYY-MM-DD")}T${event.timeStart}`,
-          endDate: `${dayjs(event.date).format("YYYY-MM-DD")}T${event.timeEnd}`,
-          title: (
-            <NavLink
-              style={{ textDecoration: "none" }}
-              to={`/events/${event.type}/${event._id}`}
-            >
-              {event.title}
-            </NavLink>
-          ),
-        };
-      });
-      return <ScheduleEvents events={eventsToScheduleFormat} />;
+      if (eventsUserParticipate.status === "success") {
+        const eventsToScheduleFormat = eventsUserParticipate.events.map((event) => {
+          return {
+            startDate: `${dayjs(event.date).format("YYYY-MM-DD")}T${event.timeStart}`,
+            endDate: `${dayjs(event.date).format("YYYY-MM-DD")}T${event.timeEnd}`,
+            title: (
+              <NavLink
+                style={{ textDecoration: "none" }}
+                to={`/events/${event.type}/${event._id}`}
+              >
+                {event.title}
+              </NavLink>
+            ),
+          };
+        });
+        return <ScheduleEvents events={eventsToScheduleFormat} />;
+      } else {
+        return <ScheduleEvents events={undefined} />;
+      }
 
       // return (
       //   <>
