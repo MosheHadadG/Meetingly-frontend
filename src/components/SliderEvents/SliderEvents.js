@@ -24,7 +24,11 @@ function SliderEvents({ events }) {
         </Slider>
       );
     } else {
-      return <Slider {...sliderSettings}>{renderCardSkeleton(5)}</Slider>;
+      return (
+        <Slider arrows={false} {...sliderSettings}>
+          {renderCardSkeleton(5)}
+        </Slider>
+      );
     }
   };
 
