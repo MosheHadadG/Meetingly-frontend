@@ -48,9 +48,7 @@ function RangeDistance({ userDistanceRange, userLocation, userLoggedIn }) {
           </S.RangePlaceParagraph>
         </S.RangePlaceDetailsSpan>
         <S.RangeDistanceDetailsSpan>
-          <S.RangeDistanceParagraph>
-            עד {userDistanceRange} ק"מ
-          </S.RangeDistanceParagraph>
+          <S.RangeDistanceParagraph>עד {userDistanceRange} ק"מ</S.RangeDistanceParagraph>
         </S.RangeDistanceDetailsSpan>
       </S.RangeDistanceDetails>
     </S.RangeDistanceContainer>

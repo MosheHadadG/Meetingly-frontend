@@ -36,6 +36,7 @@ export default function SortEvents({ sortedEventsBy }) {
                 right: 0,
                 top: 7,
                 transformOrigin: "unset",
+
                 // fontFamily: "Segoe UI", "Tahoma", "Geneva", "Verdana", "sans-serif",
               }}
             ></InputLabel>
