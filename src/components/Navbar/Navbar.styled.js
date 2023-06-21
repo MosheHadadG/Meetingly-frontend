@@ -51,7 +51,8 @@ export const NavbarLi = styled.li`
 export const NavbarLink = styled.a``;
 
 export const IconContainer = styled.div`
-  width: 100%;
+  width: 1em;
+
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -60,7 +61,7 @@ export const IconContainer = styled.div`
 export const Counter = styled.div`
   position: absolute;
   top: -5px;
-  right: 6px;
+  left: 10px;
   width: 10px;
   height: 10px;
   background-color: var(--color-primary-purple);

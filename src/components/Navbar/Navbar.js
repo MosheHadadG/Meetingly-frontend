@@ -17,19 +17,20 @@ import { snackBarContext } from "../../services/contexts/SnackBar";
 import CustomizedSnackbar from "../Snackbar/Snackbar";
 import { useGetNumberNotificationsEventsRequestsQuery } from "../../redux/slices/apiSlices/authApiSlice";
 import { useSelector } from "react-redux";
-import {
-  selectCurrentNumberEventsRequests,
-  selectCurrentNumberNotifications,
-} from "../../redux/slices/authSlice";
+
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
+import {
+  selectCurrentNumberUnreadEventsRequests,
+  selectCurrentNumberUnreadNotifications,
+} from "../../redux/slices/authSlice";
 
 function Navbar() {
   const { snackBarIsActive, closeSnackBar, snackBarType, snackBarMessage } =
     useContext(snackBarContext);
 
   const isDesktop = useSelector(selectIsDesktop);
-  const numberNotification = useSelector(selectCurrentNumberNotifications);
-  const numberEventsRequests = useSelector(selectCurrentNumberEventsRequests);
+  const numberUnreadNotification = useSelector(selectCurrentNumberUnreadNotifications);
+  const numberUnreadEventsRequests = useSelector(selectCurrentNumberUnreadEventsRequests);
 
   // console.log(snackBarIsActive);
 
@@ -57,8 +58,10 @@ function Navbar() {
               <NavLink to={NOTIFICATION}>
                 <S.IconContainer>
                   <NotificationsNoneIcon sx={{ fontSize: "1.8rem" }} />
-                  {numberNotification + numberEventsRequests > 0 && (
-                    <S.Counter>{numberNotification + numberEventsRequests}</S.Counter>
+                  {numberUnreadNotification + numberUnreadEventsRequests > 0 && (
+                    <S.Counter>
+                      {numberUnreadNotification + numberUnreadEventsRequests}
+                    </S.Counter>
                   )}
                 </S.IconContainer>
               </NavLink>

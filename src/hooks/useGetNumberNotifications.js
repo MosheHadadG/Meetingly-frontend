@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useGetNumberNotificationsEventsRequestsQuery } from "../redux/slices/apiSlices/notificationsApiSlice";
 import {
-  setNumberEventsRequests,
-  setNumberNotifications,
+  setNumberUnreadEventsRequests,
+  setNumberUnreadNotifications,
 } from "../redux/slices/authSlice";
 
 const useGetNumberNotifications = ({ userLoggedIn }) => {
@@ -19,10 +19,12 @@ const useGetNumberNotifications = ({ userLoggedIn }) => {
     if (!userLoggedIn) return;
     if (numberNotificationsEventsRequests) {
       dispatch(
-        setNumberNotifications(numberNotificationsEventsRequests.totalNotifications)
+        setNumberUnreadNotifications(numberNotificationsEventsRequests.totalNotifications)
       );
       dispatch(
-        setNumberEventsRequests(numberNotificationsEventsRequests.totalEventsRequests)
+        setNumberUnreadEventsRequests(
+          numberNotificationsEventsRequests.totalEventsRequests
+        )
       );
     }
   }, [numberNotificationsEventsRequests, userLoggedIn]);

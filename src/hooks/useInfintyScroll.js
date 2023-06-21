@@ -3,12 +3,10 @@ import { useDispatch } from "react-redux";
 
 const useInfintyScroll = ({ increasePage, options = null, skip = false }) => {
   const [lastElement, setLastElement] = useState(null);
-  console.log(lastElement);
   const dispatch = useDispatch();
   const observer = useRef(
     new IntersectionObserver((entries) => {
       const [entry] = entries;
-      console.log(entry);
       if (entry.isIntersecting && !skip) {
         dispatch(increasePage());
       }

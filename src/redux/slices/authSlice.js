@@ -7,9 +7,8 @@ const initialState = {
   userCoordsLocation: null,
   token: localStorage.getItem("token"),
   isLoading: false,
-  // userFavoriteEvents: [],
-  numberNotifications: null,
-  numberEventsRequests: null,
+  numberUnreadNotifications: null,
+  numberUnreadEventsRequests: null,
   notificationsPage: 1,
   eventsRequestsPage: 1,
   totalEventsRequests: null,
@@ -52,14 +51,11 @@ const authSlice = createSlice({
     setSocket: (state, action) => {
       state.socket = action.payload;
     },
-    // setUserFavoriteEvents: (state, action) => {
-    //   state.userFavoriteEvents = action;
-    // },
-    setNumberNotifications: (state, action) => {
-      state.numberNotifications = action.payload;
+    setNumberUnreadNotifications: (state, action) => {
+      state.numberUnreadNotifications = action.payload;
     },
-    setNumberEventsRequests: (state, action) => {
-      state.numberEventsRequests = action.payload;
+    setNumberUnreadEventsRequests: (state, action) => {
+      state.numberUnreadEventsRequests = action.payload;
     },
     increaseNotificationPage: (state, action) => {
       state.notificationsPage += 1;
@@ -89,8 +85,8 @@ export const {
   setUpdatedUser,
   setUserCoordsLocation,
   setSocket,
-  setNumberNotifications,
-  setNumberEventsRequests,
+  setNumberUnreadNotifications,
+  setNumberUnreadEventsRequests,
   setUserFavoriteEvents,
   increaseNotificationPage,
   setNotificationPage,
@@ -107,12 +103,14 @@ export const isLoggedIn = (state) => state.auth.isLoggedIn;
 export const isLoading = (state) => state.auth.isLoading;
 export const userCoordsLocation = (state) => state.auth.userCoordsLocation;
 export const selectCurrentSocket = (state) => state.auth.socket;
-export const selectCurrentNumberNotifications = (state) => state.auth.numberNotifications;
-export const selectCurrentNumberEventsRequests = (state) =>
-  state.auth.numberEventsRequests;
+export const selectCurrentNumberUnreadNotifications = (state) =>
+  state.auth.numberUnreadNotifications;
+export const selectCurrentNumberUnreadEventsRequests = (state) =>
+  state.auth.numberUnreadEventsRequests;
 // export const selectUserFavoriteEvents = (state) => state.auth.userFavoriteEvents;
 export const selectCurrentNotificationsPage = (state) => state.auth.notificationsPage;
 export const selectCurrentEventsRequestsPage = (state) => state.auth.eventsRequestsPage;
 export const selectTotalEventsRequests = (state) => state.auth.totalEventsRequests;
+
 export const selectMakeEventsRequestsRefetch = (state) =>
   state.auth.makeEventsRequestsRefetch;

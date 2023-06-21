@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useInfintyScroll from "../../hooks/useInfintyScroll";
 import { useGetUserNotificationsQuery } from "../../redux/slices/apiSlices/notificationsApiSlice";
 import {
@@ -39,7 +39,6 @@ function NotificationsPage() {
     if (isSuccess) {
       if (notificationsData.status === "success") {
         const { notifications } = notificationsData;
-
         return notifications.map((notification, idx) => {
           return (
             <NotificationCard

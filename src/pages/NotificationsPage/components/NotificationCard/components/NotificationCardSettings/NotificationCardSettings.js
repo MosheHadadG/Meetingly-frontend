@@ -7,8 +7,13 @@ import {
   useMarkAsReadNotificationMutation,
 } from "../../../../../../redux/slices/apiSlices/notificationsApiSlice";
 import { authApiSlice } from "../../../../../../redux/slices/apiSlices/authApiSlice";
-import { useDispatch } from "react-redux";
-import { setNotificationPage } from "../../../../../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectCurrentNotificationsPage,
+  selectTotalNotifications,
+  setNotificationPage,
+  setTotalNotificiations,
+} from "../../../../../../redux/slices/authSlice";
 
 export default function NotificationCardSettings({ notificationId, isRead }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,6 +24,7 @@ export default function NotificationCardSettings({ notificationId, isRead }) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const notificationsPage = useSelector(selectCurrentNotificationsPage);
 
   const dispatch = useDispatch();
 
@@ -56,28 +62,28 @@ export default function NotificationCardSettings({ notificationId, isRead }) {
 
   const deleteNotification = async () => {
     try {
-      const deleteNotificationData = await deleteNotificationById(notificationId);
-
-      if (deleteNotificationData?.data?.status === "success") {
+      const deletedNotificationData = await deleteNotificationById(notificationId);
+      let totalNotificiationsCache;
+      if (deletedNotificationData?.data?.status === "success") {
         dispatch(
           authApiSlice.util.updateQueryData(
             "getUserNotifications",
             undefined,
             (cacheNotifications) => {
-              // dispatch(
-              //   authApiSlice.endpoints.getUserNotifications.initiate(
-              //     { page: 1 },
-              //     { forceRefetch: true }
-              //   )
-              // );
-              // dispatch(setNotificationPage(1));
               let notificationsUpdated = cacheNotifications.notifications.filter(
                 (notification) => notification._id !== notificationId
               );
               cacheNotifications.notifications = notificationsUpdated;
+              totalNotificiationsCache = cacheNotifications.notifications.length;
             }
           )
         );
+
+        const { totalNotifications } = deletedNotificationData.data;
+        console.log({ totalNotifications, totalNotificiationsCache });
+        if (totalNotificiationsCache <= 9 && totalNotifications > 11) {
+          dispatch(setNotificationPage(notificationsPage + 1));
+        }
       }
 
       handleClose();
