@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { INTERESTS, DASHBOARD } from "../../../../routes/CONSTANTS";
 import { useUpdateUserMutation } from "../../../../redux/slices/apiSlices/authApiSlice";
 import { io } from "socket.io-client";
+import { config } from "../../../../Constants";
 
 function LoginForm() {
   const {
@@ -47,7 +48,7 @@ function LoginForm() {
       const userData = await login(loginForm).unwrap();
       const { user, token } = userData;
       dispatch(setCredentials({ user, token }));
-      dispatch(setSocket(io("https://meetingly-socket.onrender.com")));
+      dispatch(setSocket(io(config.url.SOCKET_URL)));
       if (userData.user.firstTimeUser) {
         await updateUser({ firstTimeUser: false });
         navigate(INTERESTS);

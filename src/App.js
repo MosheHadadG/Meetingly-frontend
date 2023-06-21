@@ -24,6 +24,7 @@ import useGetNumberNotifications from "./hooks/useGetNumberNotifications";
 import useGetNotificationsSocket from "./hooks/useGetNotificationsSocket";
 import useGetEventsRequestsNotificationsSocket from "./hooks/useGetEventsRequestsNotificationsSocket";
 import useIsDesktop from "./hooks/useIsDesktop";
+import { config } from "./Constants";
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -56,7 +57,7 @@ function App() {
       // user is not logged in and have user data
 
       dispatch(setCredentials({ user: userData.user, token }));
-      dispatch(setSocket(io("https://meetingly-socket.onrender.com")));
+      dispatch(setSocket(io(config.url.SOCKET_URL)));
     } else if (userData && userLoggedIn) {
       // user already logged in and user data change
       dispatch(setUpdatedUser(userData.user));
