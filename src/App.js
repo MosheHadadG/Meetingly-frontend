@@ -52,7 +52,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (userData && !userLoggedIn) {
+    if (userData && token && !userLoggedIn) {
       // user is not logged in and have user data
 
       dispatch(setCredentials({ user: userData.user, token }));
