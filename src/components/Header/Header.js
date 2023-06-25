@@ -5,13 +5,16 @@ import MeetinglyLogo from "../../assets/images/MeetinglyLogo.png";
 import * as S from "./Header.styled";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
-import { DASHBOARD } from "../../routes/CONSTANTS";
+import { NavLink, useNavigate } from "react-router-dom";
+import { CHAT, DASHBOARD } from "../../routes/CONSTANTS";
 import Avatar from "@mui/material/Avatar";
 import UserMenu from "./components/UserMenu/UserMenu";
+import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
+import { selectNumberUnreadChatsData } from "../../redux/slices/chatSlice";
 
 function Header() {
   const user = useSelector(selectCurrentUser);
+  const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
   const navigate = useNavigate();
   return (
     <S.Container>
@@ -29,10 +32,17 @@ function Header() {
             </S.UserMenuArrow>
           </S.AvatarContainer>
 
-          <Paragraph
+          <S.ChatIconContainer onClick={() => navigate(CHAT)}>
+            <MessageOutlinedIcon sx={{ fontSize: "1.6rem" }} />
+            {totalUnreadChatsData?.totalUnreadChats > 0 && (
+              <S.Counter>{totalUnreadChatsData?.totalUnreadChats}</S.Counter>
+            )}
+          </S.ChatIconContainer>
+
+          {/* <Paragraph
             text={`היי, ${user.firstName} ${user.lastName}`}
             justifyContent="flex-start"
-          />
+          /> */}
         </S.UserWelcome>
         <S.LogoWrapper>
           <S.Logo onClick={() => navigate(DASHBOARD)} src={MeetinglyLogo} alt="logo" />

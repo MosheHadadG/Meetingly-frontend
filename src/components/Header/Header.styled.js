@@ -28,7 +28,7 @@ export const UserWelcome = styled.div`
   display: flex;
   align-items: center;
   padding: 0 20px;
-  gap: 5px;
+  gap: 10px;
 `;
 
 export const AvatarContainer = styled.div`
@@ -56,4 +56,28 @@ export const Logo = styled.img`
   height: 100%;
   object-fit: cover;
   object-position: center;
+`;
+
+export const ChatIconContainer = styled.div`
+  width: 1.6rem;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+
+export const Counter = styled.div`
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary-purple);
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
 `;

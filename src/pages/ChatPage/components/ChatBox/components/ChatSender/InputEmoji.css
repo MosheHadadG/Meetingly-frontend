@@ -1,0 +1,8 @@
+.react-input-emoji--input {
+  text-align: right !important;
+}
+
+.react-emoji-picker--wrapper {
+  right: unset !important;
+  left: 0 !important;
+}

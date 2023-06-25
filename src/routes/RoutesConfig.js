@@ -13,6 +13,7 @@ import {
   EVENTS_REQUESTS,
   CALENDAR,
   FAVORITES,
+  CHAT,
 } from "./CONSTANTS";
 
 import SnackBarProvider from "../services/contexts/SnackBar";
@@ -55,7 +56,7 @@ const EventsRequestsPage = lazy(() =>
   import("../pages/EventsRequestsPage/EventsRequestsPage")
 );
 const FavoritesPage = lazy(() => import("../pages/FavoritesPage/FavoritesPage"));
-
+const ChatPage = lazy(() => import("../pages/ChatPage/ChatPage"));
 function RoutesConfig() {
   return (
     <Suspense fallback={<Spinner />}>
@@ -87,6 +88,7 @@ function RoutesConfig() {
           <Route path={"/profile/:username"} element={<ProfilePage />} />
           <Route path={CALENDAR} element={<CalendarPage />} />
           <Route path={FAVORITES} element={<FavoritesPage />} />
+          <Route path={CHAT} element={<ChatPage />} />
         </Route>
 
         {/* Not Found Route */}

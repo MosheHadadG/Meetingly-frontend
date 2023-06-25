@@ -11,6 +11,7 @@ import {
   setUpdatedUser,
   isLoggedIn,
   setNotificationPage,
+  setOnlineUser,
 } from "./redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { authApiSlice, useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
@@ -25,6 +26,7 @@ import useGetNotificationsSocket from "./hooks/useGetNotificationsSocket";
 import useGetEventsRequestsNotificationsSocket from "./hooks/useGetEventsRequestsNotificationsSocket";
 import useIsDesktop from "./hooks/useIsDesktop";
 import { config } from "./Constants";
+import useGetNumberUnreadMessages from "./hooks/useGetNumberUnreadMessages";
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -40,6 +42,7 @@ function App() {
     skip: !token,
   });
   useGetNumberNotifications({ userLoggedIn });
+  useGetNumberUnreadMessages({ userLoggedIn });
   // Socket Server Listenerer Get Notifications
   useGetNotificationsSocket({ socket, userLoggedIn });
   useGetEventsRequestsNotificationsSocket({ socket, userLoggedIn });
@@ -69,6 +72,9 @@ function App() {
       socket.emit("newSocketUser", {
         userId: userData.user._id,
         username: userData.user.username,
+      });
+      socket.on("getOnlineUsers", (onlineUsers) => {
+        dispatch(setOnlineUser(onlineUsers));
       });
     }
   }, [socket, userData]);

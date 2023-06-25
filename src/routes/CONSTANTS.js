@@ -11,3 +11,4 @@ export const NOTIFICATION = "/notifications";
 export const FAVORITES = "/favorites";
 export const CALENDAR = "/calendar";
 export const EVENTS_REQUESTS = "/events_requests";
+export const CHAT = "/chat";

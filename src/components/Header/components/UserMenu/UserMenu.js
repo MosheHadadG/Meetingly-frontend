@@ -2,10 +2,11 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMarkAsReadAllNotificationsMutation } from "../../../../redux/slices/apiSlices/notificationsApiSlice";
 import {
   logOut,
+  selectCurrentSocket,
   setNotificationPage,
   userLogout,
 } from "../../../../redux/slices/authSlice";
@@ -15,6 +16,7 @@ import { apiSlice } from "../../../../api/apiSlice";
 export default function UserMenu({ username }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const socket = useSelector(selectCurrentSocket);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,8 +36,12 @@ export default function UserMenu({ username }) {
 
   const logout = () => {
     dispatch(userLogout());
+
     // rest all cache
     dispatch(apiSlice.util.resetApiState());
+
+    // Disconnect Socket
+    socket.disconnect();
   };
 
   return (

@@ -14,6 +14,7 @@ const initialState = {
   totalEventsRequests: null,
   makeEventsRequestsRefetch: false,
   socket: null,
+  onlineUsers: [],
 };
 const authSlice = createSlice({
   name: "auth",
@@ -51,6 +52,9 @@ const authSlice = createSlice({
     setSocket: (state, action) => {
       state.socket = action.payload;
     },
+    setOnlineUser: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
     setNumberUnreadNotifications: (state, action) => {
       state.numberUnreadNotifications = action.payload;
     },
@@ -85,6 +89,7 @@ export const {
   setUpdatedUser,
   setUserCoordsLocation,
   setSocket,
+  setOnlineUser,
   setNumberUnreadNotifications,
   setNumberUnreadEventsRequests,
   setUserFavoriteEvents,
@@ -103,6 +108,7 @@ export const isLoggedIn = (state) => state.auth.isLoggedIn;
 export const isLoading = (state) => state.auth.isLoading;
 export const userCoordsLocation = (state) => state.auth.userCoordsLocation;
 export const selectCurrentSocket = (state) => state.auth.socket;
+export const selectOnlineUsers = (state) => state.auth.onlineUsers;
 export const selectCurrentNumberUnreadNotifications = (state) =>
   state.auth.numberUnreadNotifications;
 export const selectCurrentNumberUnreadEventsRequests = (state) =>

@@ -4,5 +4,5 @@ export const DialogError = styled.div`
 `;
 
 export const DialogContent = styled.div`
-  width: 100%;
+  min-width: 25vw;
 `;

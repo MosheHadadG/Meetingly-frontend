@@ -8,6 +8,7 @@ import { dialogContext } from "../../../../services/contexts/Dialog";
 import EditProfile from "./components/EditProfile/EditProfile";
 import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
 import ProfileBio from "./components/ProfileBio/ProfileBio";
+import CreatePrivateChat from "./components/CreateChat/CreatePrivateChat";
 
 function ProfileHeader({ userProfile, isUserLoggedInProfile }) {
   return (
@@ -24,6 +25,7 @@ function ProfileHeader({ userProfile, isUserLoggedInProfile }) {
         userProfile={userProfile}
         isUserLoggedInProfile={isUserLoggedInProfile}
       />
+      {!isUserLoggedInProfile && <CreatePrivateChat userProfile={userProfile} />}
     </S.Container>
   );
 }

@@ -24,6 +24,8 @@ export const apiSlice = createApi({
     "Requests",
     "Favorite",
     "NotificationsCounter",
+    "Chats",
+    "ChatsCounter",
   ],
   endpoints: (builder) => ({}),
 });
