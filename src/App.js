@@ -27,6 +27,7 @@ import useGetEventsRequestsNotificationsSocket from "./hooks/useGetEventsRequest
 import useIsDesktop from "./hooks/useIsDesktop";
 import { config } from "./Constants";
 import useGetNumberUnreadMessages from "./hooks/useGetNumberUnreadMessages";
+import useGetMessagesSocket from "./hooks/useGetMessagesSocket";
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -46,6 +47,7 @@ function App() {
   // Socket Server Listenerer Get Notifications
   useGetNotificationsSocket({ socket, userLoggedIn });
   useGetEventsRequestsNotificationsSocket({ socket, userLoggedIn });
+  useGetMessagesSocket({ socket, userLoggedIn });
   useIsDesktop();
   const dispatch = useDispatch();
 

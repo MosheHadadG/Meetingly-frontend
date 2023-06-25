@@ -27,21 +27,6 @@ function ChatPage() {
   const isDesktop = useSelector(selectIsDesktop);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket?.on("getMessage", ({ messageSent }) => {
-      dispatch(
-        chatApiSlice.util.updateQueryData(
-          "getChatMessages",
-          { chatId: messageSent.chatId },
-          (chatMessegesCache) => {
-            chatMessegesCache.result.push(messageSent);
-          }
-        )
-      );
-      dispatch(chatApiSlice.util.invalidateTags(["ChatsCounter", "Chats"]));
-    });
-  }, [socket]);
-
   const renderConversations = () => {
     if (isLoading) {
       console.log("loading...");
