@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../../../../../components/Spinner/Spinner";
 import { useCreateChatMutation } from "../../../../../../redux/slices/apiSlices/chatApiSlice";
 import { CHAT } from "../../../../../../routes/CONSTANTS";
 import * as S from "./CreatePrivateChat.styled";
@@ -9,21 +10,23 @@ function CreatePrivateChat({ userProfile }) {
   const navigate = useNavigate();
 
   const handleCreateChat = async () => {
-    console.log(userProfile);
-
     try {
-      const chat = await createChat({ receiverUsername: userProfile.username }).unwrap();
-      navigate(CHAT);
+      const chatData = await createChat({
+        receiverUsername: userProfile.username,
+      }).unwrap();
+      if (chatData.status === "success") {
+        navigate(CHAT, { state: { currentChat: chatData.result } });
+      } else if (chatData.status === "chatExist") {
+        navigate(CHAT, { state: { currentChat: chatData.result[0] } });
+      } else {
+        return;
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  return (
-    <>
-      <S.CreateChatButton onClick={handleCreateChat}>התחל שיחה</S.CreateChatButton>
-    </>
-  );
+  return <S.CreateChatButton onClick={handleCreateChat}>התחל שיחה</S.CreateChatButton>;
 }
 
 export default CreatePrivateChat;

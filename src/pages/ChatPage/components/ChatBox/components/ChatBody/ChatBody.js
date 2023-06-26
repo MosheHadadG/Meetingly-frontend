@@ -18,7 +18,7 @@ import {
 } from "../../../../../../redux/slices/chatSlice";
 import Spinner from "../../../../../../components/Spinner/Spinner";
 import { totalUnreadMessage } from "../../../../utils/chat.util";
-function ChatBody({ chat, userLoggedIn }) {
+function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
   const {
     data: messages,
     isLoading,
@@ -29,14 +29,12 @@ function ChatBody({ chat, userLoggedIn }) {
   const [markMessagesAsRead] = useMarkMessagesAsReadMutation();
   const scroll = useRef();
   const isDesktop = useSelector(selectIsDesktop);
-  const userData = useSelector(selectCurrentChatUserData);
   const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const dispatch = useDispatch();
   const isOwnMessage = (message) => {
     return message.senderId === userLoggedIn._id;
   };
@@ -51,7 +49,6 @@ function ChatBody({ chat, userLoggedIn }) {
         }
       };
 
-      console.log(messages.result);
       if (!totalUnreadChatsData?.totalUnreadMessageInChat) return;
 
       if (totalUnreadMessage(chat._id, totalUnreadChatsData.totalUnreadMessageInChat)) {
@@ -78,7 +75,11 @@ function ChatBody({ chat, userLoggedIn }) {
                 >
                   <Avatar
                     sx={{ width: 35, height: 35 }}
-                    src={isOwnMessage(message) ? userLoggedIn.avatar : userData.avatar}
+                    src={
+                      isOwnMessage(message)
+                        ? userLoggedIn.avatar
+                        : currentChatUserData.avatar
+                    }
                   />
                   <S.Message own={isOwnMessage(message)}>
                     <S.MessageText>{message.text}</S.MessageText>

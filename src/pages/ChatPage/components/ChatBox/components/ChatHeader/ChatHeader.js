@@ -13,56 +13,15 @@ import {
   selectCurrentUserData,
 } from "../../../../../../redux/slices/chatSlice";
 
-function ChatHeader({ chat, userLoggedIn, setChatBoxOpen }) {
-  // const {
-  //   data: userData,
-  //   isLoading,
-  //   isSuccess,
-  //   isError,
-  //   error,
-  // } = useGetUserByUsernameQuery(
-  //   chat.members.find((username) => username !== userLoggedIn.username)
-  // );
+function ChatHeader({ setChatBoxOpen, currentChatUserData }) {
   const isDesktop = useSelector(selectIsDesktop);
   const onlineUsers = useSelector(selectOnlineUsers);
-  const userData = useSelector(selectCurrentChatUserData);
 
-  const isOnline = (userData) => {
-    return onlineUsers.find((onlineUser) => onlineUser.userId === userData._id);
+  const isOnline = (currentChatUserData) => {
+    return onlineUsers.find(
+      (onlineUser) => onlineUser.userId === currentChatUserData._id
+    );
   };
-
-  // const renderChatHeader = () => {
-  //   if (isLoading) {
-  //     return <Spinner />;
-  //   } else if (isSuccess) {
-  //     return (
-  //       <Container>
-  //         <S.Conversation>
-  //           {!isDesktop && (
-  //             <div onClick={() => setChatBoxOpen(null)}>
-  //               <ArrowForwardIosIcon />
-  //             </div>
-  //           )}
-  //           <S.UserContainer>
-  //             <S.AvatarContainer>
-  //               {isOnline(userData) && <S.OnlineDot />}
-  //               <Avatar
-  //                 alt={userData.username}
-  //                 src={userData.avatar}
-  //                 sx={{ width: 56, height: 56 }}
-  //               />
-  //             </S.AvatarContainer>
-  //             <S.NameContainer>
-  //               <S.UserFullName>{`${userData.firstName} ${userData.lastName}`}</S.UserFullName>
-  //             </S.NameContainer>
-  //           </S.UserContainer>
-  //         </S.Conversation>
-  //       </Container>
-  //     );
-  //   } else if (isError) {
-  //     console.log(error);
-  //   }
-  // };
 
   return (
     <Container>
@@ -74,15 +33,15 @@ function ChatHeader({ chat, userLoggedIn, setChatBoxOpen }) {
         )}
         <S.UserContainer>
           <S.AvatarContainer>
-            {isOnline(userData) && <S.OnlineDot />}
+            {isOnline(currentChatUserData) && <S.OnlineDot />}
             <Avatar
-              alt={userData.username}
-              src={userData.avatar}
+              alt={currentChatUserData.username}
+              src={currentChatUserData.avatar}
               sx={{ width: 56, height: 56 }}
             />
           </S.AvatarContainer>
           <S.NameContainer>
-            <S.UserFullName>{`${userData.firstName} ${userData.lastName}`}</S.UserFullName>
+            <S.UserFullName>{`${currentChatUserData.firstName} ${currentChatUserData.lastName}`}</S.UserFullName>
           </S.NameContainer>
         </S.UserContainer>
       </S.Conversation>

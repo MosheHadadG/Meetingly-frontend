@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authApiSlice } from "../../redux/slices/apiSlices/authApiSlice";
-import {
-  chatApiSlice,
-  useGetUserChatsQuery,
-} from "../../redux/slices/apiSlices/chatApiSlice";
-import { selectCurrentSocket } from "../../redux/slices/authSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useGetUserChatsQuery } from "../../redux/slices/apiSlices/chatApiSlice";
 import { setCurrentChatUserData } from "../../redux/slices/chatSlice";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
 import * as S from "./ChatPage.styled";
@@ -23,9 +19,22 @@ function ChatPage() {
   } = useGetUserChatsQuery();
   const [currentChat, setCurrentChat] = useState(null);
 
-  const socket = useSelector(selectCurrentSocket);
-  const isDesktop = useSelector(selectIsDesktop);
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isDesktop = useSelector(selectIsDesktop);
+
+  useEffect(() => {
+    if (userChats && location?.state?.currentChat) {
+      console.log(location?.state?.currentChat);
+      setCurrentChat(location.state.currentChat);
+    }
+  }, [location, userChats]);
+
+  const handleClickConversation = (chat) => {
+    setCurrentChat(chat);
+    navigate(".", { state: { currentChat: chat } });
+  };
 
   const renderConversations = () => {
     if (isLoading) {
@@ -33,8 +42,9 @@ function ChatPage() {
     } else if (isSuccess) {
       return userChats.chats.map((chat) => {
         return (
-          <div key={chat._id} onClick={() => setCurrentChat(chat)}>
+          <div key={chat._id} onClick={() => handleClickConversation(chat)}>
             <Conversation
+              startConversation={location?.state?.currentChat}
               handleClick={({ userData }) => dispatch(setCurrentChatUserData(userData))}
               chat={chat}
               isDesktop={isDesktop}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../../components/Spinner/Spinner";
 import { useGetUserByUsernameQuery } from "../../../../redux/slices/apiSlices/authApiSlice";
@@ -7,10 +7,11 @@ import * as S from "./Conversation.styled";
 import { Avatar } from "@mui/material";
 import {
   selectNumberUnreadChatsData,
+  setCurrentChatUserData,
   setCurrentUserData,
 } from "../../../../redux/slices/chatSlice";
 import { totalUnreadMessage } from "../../utils/chat.util";
-function Conversation({ chat, isDesktop, handleClick }) {
+function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const userLoggedIn = useSelector(selectCurrentUser);
   const {
     data: userData,
@@ -21,8 +22,18 @@ function Conversation({ chat, isDesktop, handleClick }) {
   } = useGetUserByUsernameQuery(
     chat.members.find((username) => username !== userLoggedIn.username)
   );
+
   const onlineUsers = useSelector(selectOnlineUsers);
   const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userData && startConversation) {
+      if (startConversation._id === chat._id) {
+        dispatch(setCurrentChatUserData(userData));
+      }
+    }
+  }, [userData, startConversation]);
 
   const isOnline = (userData) => {
     return onlineUsers.find((onlineUser) => onlineUser.userId === userData._id);

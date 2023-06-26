@@ -51,14 +51,14 @@ export const UserStatus = styled.span``;
 
 export const Counter = styled.div`
   position: absolute;
-  top: 35%;
+  top: 40%;
   left: 10%;
   width: 8px;
   height: 8px;
   background-color: var(--color-primary-purple);
   border-radius: 50%;
   padding: 5px;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
