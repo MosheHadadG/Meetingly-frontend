@@ -1,6 +1,6 @@
 import styled from "styled-components/macro";
 export const Container = styled.div`
-  width: ${({ isDesktop }) => (isDesktop ? "50%" : "100%")};
+  width: ${({ isDesktop }) => (isDesktop ? "35%" : "100%")};
   height: 100%;
   display: flex;
   flex-direction: column;

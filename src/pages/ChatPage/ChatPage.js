@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useGetUserChatsQuery } from "../../redux/slices/apiSlices/chatApiSlice";
+import {
+  chatApiSlice,
+  useGetUserChatsQuery,
+} from "../../redux/slices/apiSlices/chatApiSlice";
 import { setCurrentChatUserData } from "../../redux/slices/chatSlice";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
 import * as S from "./ChatPage.styled";
@@ -26,21 +29,26 @@ function ChatPage() {
 
   useEffect(() => {
     if (userChats && location?.state?.currentChat) {
-      console.log(location?.state?.currentChat);
       setCurrentChat(location.state.currentChat);
     }
   }, [location, userChats]);
 
   const handleClickConversation = (chat) => {
     setCurrentChat(chat);
-    navigate(".", { state: { currentChat: chat } });
+    navigate(location.pathname, { replace: true });
+  };
+
+  const sortByLastMessageDate = (a, b) => {
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
   };
 
   const renderConversations = () => {
     if (isLoading) {
       console.log("loading...");
     } else if (isSuccess) {
-      return userChats.chats.map((chat) => {
+      const sortedConversation = [...userChats.chats].sort(sortByLastMessageDate);
+      // console.log(sortedConversation);
+      return sortedConversation.map((chat) => {
         return (
           <div key={chat._id} onClick={() => handleClickConversation(chat)}>
             <Conversation

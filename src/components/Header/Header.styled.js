@@ -37,7 +37,7 @@ export const AvatarContainer = styled.div`
 
 export const UserMenuArrow = styled.div`
   position: absolute;
-
+  cursor: pointer;
   bottom: -23px;
   left: 8px;
 `;
@@ -60,7 +60,7 @@ export const Logo = styled.img`
 
 export const ChatIconContainer = styled.div`
   width: 1.6rem;
-
+  cursor: pointer;
   display: flex;
   align-items: center;
   position: relative;

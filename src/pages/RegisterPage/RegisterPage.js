@@ -18,7 +18,7 @@ function RegisterPage() {
       <S.LogoWrapper>
         <S.Logo src={MeetinglyLogo} alt="logo" />
       </S.LogoWrapper>
-      <S.RegisterFormContainer>
+      <S.RegisterFormContainer isDesktop={isDesktop}>
         <RegisterForm step={step} setStep={setStep} />
       </S.RegisterFormContainer>
     </S.Container>

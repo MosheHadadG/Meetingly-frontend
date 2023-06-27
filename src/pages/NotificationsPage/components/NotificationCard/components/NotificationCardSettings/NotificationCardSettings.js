@@ -10,9 +10,7 @@ import { authApiSlice } from "../../../../../../redux/slices/apiSlices/authApiSl
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCurrentNotificationsPage,
-  selectTotalNotifications,
   setNotificationPage,
-  setTotalNotificiations,
 } from "../../../../../../redux/slices/authSlice";
 
 export default function NotificationCardSettings({ notificationId, isRead }) {

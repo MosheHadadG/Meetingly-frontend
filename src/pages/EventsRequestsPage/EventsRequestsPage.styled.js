@@ -1,7 +1,7 @@
 import styled from "styled-components/macro";
 export const Container = styled.div`
   width: ${({ isDesktop, fromNotificationsPage }) =>
-    isDesktop && !fromNotificationsPage ? "55%" : "100%"};
+    isDesktop && !fromNotificationsPage ? "45%" : "100%"};
   display: flex;
   flex-direction: column;
   align-items: center;

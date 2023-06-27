@@ -25,6 +25,7 @@ export const EditSectionButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 export const EditSectionTitle = styled.p`
   font-size: 1.4rem;

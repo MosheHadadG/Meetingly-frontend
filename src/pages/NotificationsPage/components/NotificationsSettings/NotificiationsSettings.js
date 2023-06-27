@@ -62,7 +62,7 @@ export default function NotificationsSettings({ isRead }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={markAsRead}>סמן כנקרא את כל ההתראות</MenuItem>
+        <MenuItem onClick={markAsRead}>סמן הכל כנקרא</MenuItem>
       </Menu>
     </div>
   );

@@ -1,10 +1,11 @@
 import styled from "styled-components/macro";
 
 export const Container = styled.div`
-  width: ${({ isDesktop }) => (isDesktop ? "55%" : "100%")};
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 30px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 `;
@@ -23,7 +24,7 @@ export const Logo = styled.img`
 `;
 
 export const RegisterFormContainer = styled.div`
-  width: 100%;
+  width: ${({ isDesktop }) => (isDesktop ? "35%" : "100%")};
   display: flex;
   justify-content: center;
 `;

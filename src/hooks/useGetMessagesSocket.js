@@ -8,6 +8,7 @@ const useGetMessagesSocket = ({ socket, userLoggedIn }) => {
   useEffect(() => {
     if (!userLoggedIn) return;
 
+    // push new message to cache messages
     socket?.on("getMessage", ({ messageSent }) => {
       dispatch(
         chatApiSlice.util.updateQueryData(
@@ -18,7 +19,26 @@ const useGetMessagesSocket = ({ socket, userLoggedIn }) => {
           }
         )
       );
-      dispatch(chatApiSlice.util.invalidateTags(["ChatsCounter", "Chats"]));
+
+      // update chat updatedAt By last message createdAt and update last Message
+      dispatch(
+        chatApiSlice.util.updateQueryData("getUserChats", undefined, (userChatsCache) => {
+          const chats = userChatsCache.chats.map((chatCache) => {
+            if (chatCache._id === messageSent.chatId) {
+              return {
+                ...chatCache,
+                lastMessage: messageSent,
+                updatedAt: messageSent.createdAt,
+              };
+            }
+
+            return chatCache;
+          });
+
+          return (userChatsCache = { chats });
+        })
+      );
+      dispatch(chatApiSlice.util.invalidateTags(["ChatsCounter"]));
     });
   }, [socket, userLoggedIn]);
 

@@ -29,6 +29,7 @@ function ChatSender({ chat, userLoggedIn }) {
     try {
       const messageSent = await addMessage(messageData);
 
+      // push new message to cache messages
       dispatch(
         chatApiSlice.util.updateQueryData(
           "getChatMessages",
@@ -38,8 +39,28 @@ function ChatSender({ chat, userLoggedIn }) {
           }
         )
       );
+
+      // update chat updatedAt By last message createdAt and update last Message
+      dispatch(
+        chatApiSlice.util.updateQueryData("getUserChats", undefined, (userChatsCache) => {
+          const chats = userChatsCache.chats.map((chatCache) => {
+            if (chatCache._id === chat._id) {
+              return {
+                ...chatCache,
+                lastMessage: messageSent.data.message,
+                updatedAt: messageSent.data.message.createdAt,
+              };
+            }
+
+            return chatCache;
+          });
+
+          return (userChatsCache = { chats });
+        })
+      );
+
       setNewMessage("");
-      console.log(messageSent);
+
       socket?.emit("sendMessage", {
         messageData: {
           messageSent: { ...messageSent.data.message },

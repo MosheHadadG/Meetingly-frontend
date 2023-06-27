@@ -11,6 +11,8 @@ import {
   setCurrentUserData,
 } from "../../../../redux/slices/chatSlice";
 import { totalUnreadMessage } from "../../utils/chat.util";
+import { chatApiSlice } from "../../../../redux/slices/apiSlices/chatApiSlice";
+
 function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const userLoggedIn = useSelector(selectCurrentUser);
   const {
@@ -26,6 +28,11 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const onlineUsers = useSelector(selectOnlineUsers);
   const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
   const dispatch = useDispatch();
+
+  const selectCacheMessages = chatApiSlice.endpoints.getChatMessages.select({
+    chatId: chat._id,
+  });
+  const { data: messages, isLoading: s } = useSelector(selectCacheMessages);
 
   useEffect(() => {
     if (userData && startConversation) {
@@ -52,6 +59,30 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
     );
   };
 
+  const renderLastMessage = () => {
+    if (messages) {
+      console.log(messages);
+    }
+    if (messages?.result?.length > 0) {
+      let lastMessage = messages.result[messages.result.length - 1];
+      if (lastMessage.senderId === userLoggedIn._id) {
+        return `את/ה: ${lastMessage.text}`;
+      } else {
+        return lastMessage.text;
+      }
+    } else {
+      if (chat.lastMessage) {
+        if (chat.lastMessage.senderId === userLoggedIn._id) {
+          return `את/ה: ${chat.lastMessage?.text}`;
+        } else {
+          return chat.lastMessage?.text;
+        }
+      } else {
+        return null;
+      }
+    }
+  };
+
   const renderConversation = () => {
     if (isLoading) {
       return <Spinner />;
@@ -70,7 +101,7 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
 
             <S.NameContainer isDesktop={isDesktop}>
               <S.UserFullName>{`${userData.firstName} ${userData.lastName}`}</S.UserFullName>
-              <S.UserStatus>{isOnline(userData) ? "מחובר" : "לא מחובר"}</S.UserStatus>
+              <S.UserStatus>{renderLastMessage()}</S.UserStatus>
             </S.NameContainer>
           </S.UserContainer>
           {renderCounterUnreadMessage(chat._id)}
