@@ -13,6 +13,7 @@ export const LeftSideChat = styled.div`
   width: ${({ isDesktop }) => (isDesktop ? "65%" : "100%")};
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 export const ScrollContainer = styled.div`
@@ -71,4 +72,6 @@ export const ChatBoxEmpyMessage = styled.span`
   align-self: center;
   justify-content: center;
   font-size: 20px;
+  position: absolute;
+  top: 9%;
 `;

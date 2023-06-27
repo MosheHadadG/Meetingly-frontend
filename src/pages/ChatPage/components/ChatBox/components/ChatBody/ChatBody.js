@@ -18,6 +18,7 @@ import {
 } from "../../../../../../redux/slices/chatSlice";
 import Spinner from "../../../../../../components/Spinner/Spinner";
 import { totalUnreadMessage } from "../../../../utils/chat.util";
+import ChatBodySkeleton from "./ChatBodySkeleton";
 function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
   const {
     data: messages,
@@ -32,7 +33,10 @@ function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
   const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
 
   useEffect(() => {
-    scroll.current?.scrollIntoView({ behavior: "smooth" });
+    scroll.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
   }, [messages]);
 
   const isOwnMessage = (message) => {
@@ -61,7 +65,7 @@ function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
 
   const renderChatBody = () => {
     if (isLoading) {
-      return <Spinner />;
+      return <ChatBodySkeleton isDesktop={isDesktop} />;
     } else if (isSuccess) {
       return (
         <S.ScrollContainer isDesktop={isDesktop}>

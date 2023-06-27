@@ -6,6 +6,7 @@ function Spinner() {
   return (
     <Box
       sx={{
+        height: "100vh",
         position: "absolute",
         left: "50%",
         top: "50%",

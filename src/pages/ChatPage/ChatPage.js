@@ -9,6 +9,7 @@ import { setCurrentChatUserData } from "../../redux/slices/chatSlice";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
 import * as S from "./ChatPage.styled";
 import ChatBox from "./components/ChatBox/ChatBox";
+import ConversationCardSkeleton from "./components/Conversation/ConversationCardSkeleton";
 import Conversation from "./components/Conversation/Conversation";
 
 function ChatPage() {
@@ -42,9 +43,17 @@ function ChatPage() {
     return new Date(b.updatedAt) - new Date(a.updatedAt);
   };
 
+  function renderCardSkeleton(cardsNum) {
+    return Array(cardsNum)
+      .fill(0)
+      .map((_, idx) => {
+        return <ConversationCardSkeleton key={idx} />;
+      });
+  }
+
   const renderConversations = () => {
     if (isLoading) {
-      console.log("loading...");
+      return renderCardSkeleton(5);
     } else if (isSuccess) {
       const sortedConversation = [...userChats.chats].sort(sortByLastMessageDate);
       // console.log(sortedConversation);

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../../../components/Spinner/Spinner";
 import { useGetUserByUsernameQuery } from "../../../../redux/slices/apiSlices/authApiSlice";
 import { selectCurrentUser, selectOnlineUsers } from "../../../../redux/slices/authSlice";
 import * as S from "./Conversation.styled";
@@ -8,10 +7,10 @@ import { Avatar } from "@mui/material";
 import {
   selectNumberUnreadChatsData,
   setCurrentChatUserData,
-  setCurrentUserData,
 } from "../../../../redux/slices/chatSlice";
 import { totalUnreadMessage } from "../../utils/chat.util";
 import { chatApiSlice } from "../../../../redux/slices/apiSlices/chatApiSlice";
+import ConversationCardSkeleton from "./ConversationCardSkeleton";
 
 function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const userLoggedIn = useSelector(selectCurrentUser);
@@ -60,9 +59,6 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   };
 
   const renderLastMessage = () => {
-    if (messages) {
-      console.log(messages);
-    }
     if (messages?.result?.length > 0) {
       let lastMessage = messages.result[messages.result.length - 1];
       if (lastMessage.senderId === userLoggedIn._id) {
@@ -85,7 +81,7 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
 
   const renderConversation = () => {
     if (isLoading) {
-      return <Spinner />;
+      return <ConversationCardSkeleton />;
     } else if (isSuccess) {
       return (
         <S.Conversation onClick={() => handleClick({ userData })}>

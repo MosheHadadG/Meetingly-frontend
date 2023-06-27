@@ -16,6 +16,15 @@ export const Conversation = styled.div`
   }
 `;
 
+export const ConversationSkeleton = styled.div`
+  border-radius: 0.5rem;
+  padding: 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  border-bottom: 2px solid #ececec;
+`;
+
 export const UserContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -51,14 +60,14 @@ export const UserStatus = styled.span``;
 
 export const Counter = styled.div`
   position: absolute;
-  top: 40%;
+  top: 45%;
   left: 10%;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background-color: var(--color-primary-purple);
   border-radius: 50%;
   padding: 5px;
-  font-size: 12px;
+  font-size: 13px;
   display: flex;
   justify-content: center;
   align-items: center;

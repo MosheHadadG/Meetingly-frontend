@@ -61,6 +61,16 @@ export const Message = styled.div`
   /* align-items: ${({ own }) => (own ? `flex-start` : `flex-end`)}; */
 `;
 
+export const MessageSkeleton = styled.div`
+  padding: 0.6rem;
+  border-radius: ${({ own }) => (own ? `1rem 1rem 0 1rem` : `1rem 1rem 1rem 0`)};
+  max-width: 28rem;
+  /* width: fit-content; */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
 export const MessageText = styled.span``;
 export const CreatedAt = styled.span`
   font-size: 0.7rem;
