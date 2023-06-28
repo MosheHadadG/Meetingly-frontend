@@ -10,9 +10,11 @@ import {
   selectCurrentSocket,
   selectCurrentUser,
 } from "../../../../redux/slices/authSlice";
+import { useAddMemberToChatMutation } from "../../../../redux/slices/apiSlices/chatApiSlice";
 
 function EventJoining({ privacy, title, eventId }) {
   const [userJoinToEvent, { isLoading }] = useUserJoinToEventMutation();
+  const [addMemberToChat] = useAddMemberToChatMutation();
   const { openSnackBar } = useContext(snackBarContext);
   const { openDialog, closeDialog } = useContext(dialogContext);
   const [errMsg, setErrMsg] = useState();
@@ -30,6 +32,7 @@ function EventJoining({ privacy, title, eventId }) {
             notification: userJoining.notification,
             type: "ParticipantsEventChanged",
           });
+          await addMemberToChat({ eventId });
           break;
         case "private":
           openSnackBar(

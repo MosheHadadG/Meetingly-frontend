@@ -3,9 +3,45 @@ import { apiSlice } from "../../../api/apiSlice";
 export const chatApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUserChats: builder.query({
-      query: () => `/chat`,
+      query: ({ type }) => `/chat?type=${type}`,
       providesTags: ["Chats"],
     }),
+
+    createPrivateChat: builder.mutation({
+      query: ({ receiverUsername }) => ({
+        url: "/chat/private",
+        method: "POST",
+        body: { receiverUsername },
+      }),
+      invalidatesTags: ["Chats"],
+    }),
+
+    createGroupChat: builder.mutation({
+      query: ({ eventId }) => ({
+        url: "/chat/group",
+        method: "POST",
+        body: { eventId },
+      }),
+    }),
+
+    addMemberToChat: builder.mutation({
+      query: ({ eventId }) => ({
+        url: "/chat/group/add-member",
+        method: "PATCH",
+        body: { eventId },
+      }),
+      invalidatesTags: ["Chats"],
+    }),
+
+    removeMemberFromChat: builder.mutation({
+      query: ({ eventId }) => ({
+        url: "/chat/group/remove-member",
+        method: "PATCH",
+        body: { eventId },
+      }),
+      invalidatesTags: ["Chats"],
+    }),
+
     getChatMessages: builder.query({
       query: ({ chatId }) => `/chat/messages/?chatId=${chatId}`,
     }),
@@ -16,15 +52,6 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { ...messageData },
       }),
-    }),
-
-    createChat: builder.mutation({
-      query: ({ receiverUsername }) => ({
-        url: "/chat",
-        method: "POST",
-        body: { receiverUsername },
-      }),
-      invalidatesTags: ["Chats"],
     }),
 
     GetNumberUnreadMessages: builder.query({
@@ -40,27 +67,6 @@ export const chatApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["ChatsCounter"],
     }),
-
-    // markAsReadAllNotifications: builder.mutation({
-    //   query: () => ({
-    //     url: "user/notifications/mark-as-read-all",
-    //     method: "POST",
-    //   }),
-    //   invalidatesTags: ["NotificationsCounter"],
-    // }),
-
-    // getEventById: builder.query({
-    //   query: (eventId) => `/events/specific-event/?eventId=${eventId}`,
-    //   providesTags: ["Event"],
-    // }),
-
-    // uploadEventCoverImg: builder.mutation({
-    //   query: (formData) => ({
-    //     url: "events/upload-event-cover",
-    //     method: "POST",
-    //     body: formData,
-    //   }),
-    // }),
   }),
 });
 
@@ -68,7 +74,9 @@ export const {
   useGetUserChatsQuery,
   useGetChatMessagesQuery,
   useAddMessageMutation,
-  useCreateChatMutation,
+  useCreatePrivateChatMutation,
+  useCreateGroupChatMutation,
+  useAddMemberToChatMutation,
   useGetNumberUnreadMessagesQuery,
   useMarkMessagesAsReadMutation,
 } = chatApiSlice;

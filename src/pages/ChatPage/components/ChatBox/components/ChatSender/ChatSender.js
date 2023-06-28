@@ -42,21 +42,23 @@ function ChatSender({ chat, userLoggedIn }) {
 
       // update chat updatedAt By last message createdAt and update last Message
       dispatch(
-        chatApiSlice.util.updateQueryData("getUserChats", undefined, (userChatsCache) => {
-          const chats = userChatsCache.chats.map((chatCache) => {
-            if (chatCache._id === chat._id) {
-              return {
-                ...chatCache,
-                lastMessage: messageSent.data.message,
-                updatedAt: messageSent.data.message.createdAt,
-              };
-            }
-
-            return chatCache;
-          });
-
-          return (userChatsCache = { chats });
-        })
+        chatApiSlice.util.updateQueryData(
+          "getUserChats",
+          { type: chat.type },
+          (userChatsCache) => {
+            const chats = userChatsCache.chats.map((chatCache) => {
+              if (chatCache._id === chat._id) {
+                return {
+                  ...chatCache,
+                  lastMessage: messageSent.data.message,
+                  updatedAt: messageSent.data.message.createdAt,
+                };
+              }
+              return chatCache;
+            });
+            return (userChatsCache = { chats });
+          }
+        )
       );
 
       setNewMessage("");
@@ -64,7 +66,7 @@ function ChatSender({ chat, userLoggedIn }) {
       socket?.emit("sendMessage", {
         messageData: {
           messageSent: { ...messageSent.data.message },
-          receiverUsername: chat.members.find(
+          receiversUsername: chat.members.filter(
             (username) => username !== userLoggedIn.username
           ),
         },

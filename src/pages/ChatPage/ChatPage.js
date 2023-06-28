@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useGetUserChatsQuery } from "../../redux/slices/apiSlices/chatApiSlice";
 import {
-  chatApiSlice,
-  useGetUserChatsQuery,
-} from "../../redux/slices/apiSlices/chatApiSlice";
-import { setCurrentChatUserData } from "../../redux/slices/chatSlice";
+  selectIsPrivateMode,
+  setCurrentChatData,
+  setIsPrivateMode,
+} from "../../redux/slices/chatSlice";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
-import * as S from "./ChatPage.styled";
 import ChatBox from "./components/ChatBox/ChatBox";
 import ConversationCardSkeleton from "./components/Conversation/ConversationCardSkeleton";
 import Conversation from "./components/Conversation/Conversation";
+import * as S from "./ChatPage.styled";
 
-function ChatPage() {
+const ChatPage = () => {
+  const [currentChat, setCurrentChat] = useState(null);
+  const isPrivateMode = useSelector(selectIsPrivateMode);
+  const isDesktop = useSelector(selectIsDesktop);
   const {
     data: userChats,
     isLoading,
@@ -20,13 +24,11 @@ function ChatPage() {
     isFetching,
     isError,
     error,
-  } = useGetUserChatsQuery();
-  const [currentChat, setCurrentChat] = useState(null);
+  } = useGetUserChatsQuery({ type: isPrivateMode ? "private" : "group" });
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isDesktop = useSelector(selectIsDesktop);
 
   useEffect(() => {
     if (userChats && location?.state?.currentChat) {
@@ -39,36 +41,34 @@ function ChatPage() {
     navigate(location.pathname, { replace: true });
   };
 
-  const sortByLastMessageDate = (a, b) => {
-    return new Date(b.updatedAt) - new Date(a.updatedAt);
-  };
+  const sortByLastMessageDate = (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt);
 
-  function renderCardSkeleton(cardsNum) {
-    return Array(cardsNum)
+  const renderCardSkeleton = (cardsNum) =>
+    Array(cardsNum)
       .fill(0)
-      .map((_, idx) => {
-        return <ConversationCardSkeleton key={idx} />;
-      });
-  }
+      .map((_, idx) => <ConversationCardSkeleton key={idx} />);
+
+  const handleClickChatMenu = (boolean) => {
+    dispatch(setIsPrivateMode(boolean));
+    setCurrentChat(null);
+  };
 
   const renderConversations = () => {
     if (isLoading) {
       return renderCardSkeleton(5);
     } else if (isSuccess) {
       const sortedConversation = [...userChats.chats].sort(sortByLastMessageDate);
-      // console.log(sortedConversation);
-      return sortedConversation.map((chat) => {
-        return (
-          <div key={chat._id} onClick={() => handleClickConversation(chat)}>
-            <Conversation
-              startConversation={location?.state?.currentChat}
-              handleClick={({ userData }) => dispatch(setCurrentChatUserData(userData))}
-              chat={chat}
-              isDesktop={isDesktop}
-            />
-          </div>
-        );
-      });
+
+      return sortedConversation.map((chat) => (
+        <div key={chat._id} onClick={() => handleClickConversation(chat)}>
+          <Conversation
+            startConversation={location?.state?.currentChat}
+            handleClick={({ data }) => dispatch(setCurrentChatData(data))}
+            chat={chat}
+            isDesktop={isDesktop}
+          />
+        </div>
+      ));
     }
   };
 
@@ -77,7 +77,14 @@ function ChatPage() {
       <S.RightSideChat isDesktop={isDesktop} chatBoxOpen={currentChat}>
         <S.ScrollContainer isDesktop={isDesktop}>
           <S.ChatContainer isDesktop={isDesktop}>
-            <h2>הודעות פרטיות</h2>
+            <S.ChatMenu>
+              <S.ChatMenuSpan onClick={() => handleClickChatMenu(true)}>
+                פרטי
+              </S.ChatMenuSpan>
+              <S.ChatMenuSpan onClick={() => handleClickChatMenu(false)}>
+                קבוצתי
+              </S.ChatMenuSpan>
+            </S.ChatMenu>
             <S.ChatList>{renderConversations()}</S.ChatList>
           </S.ChatContainer>
         </S.ScrollContainer>
@@ -86,7 +93,7 @@ function ChatPage() {
       {(isDesktop || currentChat) && (
         <S.LeftSideChat isDesktop={isDesktop}>
           {currentChat ? (
-            <ChatBox chat={currentChat} setChatBoxOpen={setCurrentChat} />
+            <ChatBox chat={currentChat} setChatBoxOpen={setCurrentChat} isPrivateMode />
           ) : (
             <S.ChatBoxEmpyMessage>לחץ על צ'אט כדי להתחיל שיחה...</S.ChatBoxEmpyMessage>
           )}
@@ -94,6 +101,6 @@ function ChatPage() {
       )}
     </S.Chat>
   );
-}
+};
 
 export default ChatPage;

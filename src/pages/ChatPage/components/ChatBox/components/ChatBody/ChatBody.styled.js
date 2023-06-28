@@ -32,8 +32,8 @@ export const ChatBody = styled.div`
   gap: 0.5rem;
   padding: 1.5rem;
   overflow-y: ${({ isDesktop }) => (isDesktop ? "unset" : "scroll")};
-  min-height: 55vh;
-  max-height: 55vh;
+  min-height: ${({ isDesktop }) => (isDesktop ? "55vh" : "50vh")};
+  max-height: ${({ isDesktop }) => (isDesktop ? "55vh" : "50vh")};
 `;
 
 export const MessageContainer = styled.div`
@@ -52,7 +52,7 @@ export const Message = styled.div`
   color: white;
   padding: 0.6rem;
   border-radius: ${({ own }) => (own ? `1rem 1rem 0 1rem` : `1rem 1rem 1rem 0`)};
-  max-width: 28rem;
+  max-width: 15rem;
   /* width: fit-content; */
   display: flex;
   flex-direction: column;
@@ -75,4 +75,23 @@ export const MessageText = styled.span``;
 export const CreatedAt = styled.span`
   font-size: 0.7rem;
   text-align: left;
+`;
+
+export const OnlineDot = styled.div`
+  background-color: greenyellow;
+  border-radius: 50%;
+  position: absolute;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  z-index: 1;
+`;
+
+export const AvatarContainer = styled.div`
+  width: 35px;
+  position: relative;
+`;
+
+export const FullName = styled.span`
+  font-size: 0.9rem;
 `;

@@ -7,7 +7,7 @@ export const ChatBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 80vh;
+  /* height: ${({ isDesktop }) => (isDesktop ? `80vh` : `%`)}; */
   /* display: grid;
   grid-template-rows: 14vh 60vh 13vh; */
 `;

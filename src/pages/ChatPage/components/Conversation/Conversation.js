@@ -5,8 +5,9 @@ import { selectCurrentUser, selectOnlineUsers } from "../../../../redux/slices/a
 import * as S from "./Conversation.styled";
 import { Avatar } from "@mui/material";
 import {
+  selectIsPrivateMode,
   selectNumberUnreadChatsData,
-  setCurrentChatUserData,
+  setCurrentChatData,
 } from "../../../../redux/slices/chatSlice";
 import { totalUnreadMessage } from "../../utils/chat.util";
 import { chatApiSlice } from "../../../../redux/slices/apiSlices/chatApiSlice";
@@ -14,6 +15,7 @@ import ConversationCardSkeleton from "./ConversationCardSkeleton";
 
 function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const userLoggedIn = useSelector(selectCurrentUser);
+  const isPrivateMode = useSelector(selectIsPrivateMode);
   const {
     data: userData,
     isLoading,
@@ -21,7 +23,8 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
     isError,
     error,
   } = useGetUserByUsernameQuery(
-    chat.members.find((username) => username !== userLoggedIn.username)
+    chat.members.find((username) => username !== userLoggedIn.username),
+    { skip: !isPrivateMode }
   );
 
   const onlineUsers = useSelector(selectOnlineUsers);
@@ -36,7 +39,7 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   useEffect(() => {
     if (userData && startConversation) {
       if (startConversation._id === chat._id) {
-        dispatch(setCurrentChatUserData(userData));
+        dispatch(setCurrentChatData(userData));
       }
     }
   }, [userData, startConversation]);
@@ -61,14 +64,14 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const renderLastMessage = () => {
     if (messages?.result?.length > 0) {
       let lastMessage = messages.result[messages.result.length - 1];
-      if (lastMessage.senderId === userLoggedIn._id) {
+      if (lastMessage.senderId._id === userLoggedIn._id) {
         return `את/ה: ${lastMessage.text}`;
       } else {
         return lastMessage.text;
       }
     } else {
       if (chat.lastMessage) {
-        if (chat.lastMessage.senderId === userLoggedIn._id) {
+        if (chat.lastMessage.senderId._id === userLoggedIn._id) {
           return `את/ה: ${chat.lastMessage?.text}`;
         } else {
           return chat.lastMessage?.text;
@@ -79,12 +82,12 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
     }
   };
 
-  const renderConversation = () => {
+  const renderPrivateConversation = () => {
     if (isLoading) {
       return <ConversationCardSkeleton />;
     } else if (isSuccess) {
       return (
-        <S.Conversation onClick={() => handleClick({ userData })}>
+        <S.Conversation onClick={() => handleClick({ data: userData })}>
           <S.UserContainer>
             <S.AvatarContainer>
               {isOnline(userData) && <S.OnlineDot />}
@@ -108,7 +111,33 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
     }
   };
 
-  return <>{renderConversation()}</>;
+  const renderGroupConversation = () => {
+    if (chat.type === "group") {
+      return (
+        <S.Conversation onClick={() => handleClick({ data: chat.eventId })}>
+          <S.UserContainer>
+            <S.AvatarContainer>
+              <Avatar
+                alt={chat.eventId.title}
+                src={chat.eventId.imageSrc}
+                sx={{ width: 56, height: 56 }}
+              />
+            </S.AvatarContainer>
+
+            <S.NameContainer isDesktop={isDesktop}>
+              <S.UserFullName>{chat.eventId.title}</S.UserFullName>
+              <S.UserStatus>{renderLastMessage()}</S.UserStatus>
+            </S.NameContainer>
+          </S.UserContainer>
+          {renderCounterUnreadMessage(chat._id)}
+        </S.Conversation>
+      );
+    } else {
+      return <ConversationCardSkeleton />;
+    }
+  };
+
+  return <>{isPrivateMode ? renderPrivateConversation() : renderGroupConversation()}</>;
 }
 
 export default Conversation;

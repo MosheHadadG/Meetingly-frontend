@@ -1,17 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../../../../../components/Spinner/Spinner";
-import { useCreateChatMutation } from "../../../../../../redux/slices/apiSlices/chatApiSlice";
+import { useCreatePrivateChatMutation } from "../../../../../../redux/slices/apiSlices/chatApiSlice";
 import { CHAT } from "../../../../../../routes/CONSTANTS";
 import * as S from "./CreatePrivateChat.styled";
 
 function CreatePrivateChat({ userProfile }) {
-  const [createChat, { isLoading }] = useCreateChatMutation();
+  const [createPrivateChat, { isLoading }] = useCreatePrivateChatMutation();
   const navigate = useNavigate();
 
   const handleCreateChat = async () => {
     try {
-      const chatData = await createChat({
+      const chatData = await createPrivateChat({
         receiverUsername: userProfile.username,
       }).unwrap();
       if (chatData.status === "success") {

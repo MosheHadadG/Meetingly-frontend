@@ -1,25 +1,23 @@
 import React, { useEffect, useRef } from "react";
+import { format } from "timeago.js";
+import { Avatar } from "@mui/material";
+import { useSelector } from "react-redux";
 import {
-  chatApiSlice,
   useGetChatMessagesQuery,
   useMarkMessagesAsReadMutation,
 } from "../../../../../../redux/slices/apiSlices/chatApiSlice";
-import { format } from "timeago.js";
-import * as S from "./ChatBody.styled";
-import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentSocket } from "../../../../../../redux/slices/authSlice";
-import { Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { selectOnlineUsers } from "../../../../../../redux/slices/authSlice";
 import { selectIsDesktop } from "../../../../../../redux/slices/uiSlice";
-import {
-  selectCurrentChatUserData,
-  selectCurrentUserData,
-  selectNumberUnreadChatsData,
-} from "../../../../../../redux/slices/chatSlice";
-import Spinner from "../../../../../../components/Spinner/Spinner";
+import { selectNumberUnreadChatsData } from "../../../../../../redux/slices/chatSlice";
 import { totalUnreadMessage } from "../../../../utils/chat.util";
 import ChatBodySkeleton from "./ChatBodySkeleton";
-function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
+import * as S from "./ChatBody.styled";
+
+function ChatBody({ chat, userLoggedIn, isPrivateMode }) {
+  const scroll = useRef();
+  const isDesktop = useSelector(selectIsDesktop);
+  const onlineUsers = useSelector(selectOnlineUsers);
+  const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
   const {
     data: messages,
     isLoading,
@@ -28,20 +26,13 @@ function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
     error,
   } = useGetChatMessagesQuery({ chatId: chat._id });
   const [markMessagesAsRead] = useMarkMessagesAsReadMutation();
-  const scroll = useRef();
-  const isDesktop = useSelector(selectIsDesktop);
-  const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({
       behavior: "smooth",
-      block: "end",
+      block: isDesktop ? `end` : `start`,
     });
   }, [messages]);
-
-  const isOwnMessage = (message) => {
-    return message.senderId === userLoggedIn._id;
-  };
 
   useEffect(() => {
     if (messages?.result) {
@@ -57,11 +48,17 @@ function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
 
       if (totalUnreadMessage(chat._id, totalUnreadChatsData.totalUnreadMessageInChat)) {
         markAsRead();
-        // console.log("here");
-        // dispatch(chatApiSlice.util.invalidateTags(["ChatsCounter"]));
       }
     }
   }, [messages]);
+
+  const isOnline = (user) => {
+    return onlineUsers.find((onlineUser) => onlineUser.userId === user._id);
+  };
+
+  const isOwnMessage = (message) => {
+    return message.senderId._id === userLoggedIn._id;
+  };
 
   const renderChatBody = () => {
     if (isLoading) {
@@ -70,32 +67,37 @@ function ChatBody({ chat, userLoggedIn, currentChatUserData }) {
       return (
         <S.ScrollContainer isDesktop={isDesktop}>
           <S.ChatBody isDesktop={isDesktop}>
-            {messages.result.map((message) => {
-              return (
-                <S.MessageContainer
-                  ref={scroll}
-                  key={message._id}
-                  own={isOwnMessage(message)}
-                >
+            {messages.result.map((message) => (
+              <S.MessageContainer
+                ref={scroll}
+                key={message._id}
+                own={isOwnMessage(message)}
+              >
+                <S.AvatarContainer>
+                  {!isPrivateMode &&
+                    isOnline(message.senderId) &&
+                    !isOwnMessage(message) && <S.OnlineDot />}
                   <Avatar
                     sx={{ width: 35, height: 35 }}
                     src={
                       isOwnMessage(message)
                         ? userLoggedIn.avatar
-                        : currentChatUserData.avatar
+                        : message.senderId.avatar
                     }
                   />
-                  <S.Message own={isOwnMessage(message)}>
-                    <S.MessageText>{message.text}</S.MessageText>
-                    <S.CreatedAt>{format(message.createdAt, "he_HE")}</S.CreatedAt>
-                  </S.Message>
-                </S.MessageContainer>
-              );
-            })}
+                </S.AvatarContainer>
+                <S.Message own={isOwnMessage(message)}>
+                  {!isPrivateMode && !isOwnMessage(message) && (
+                    <S.FullName>{`${message.senderId.firstName} ${message.senderId.lastName}`}</S.FullName>
+                  )}
+                  <S.MessageText>{message.text}</S.MessageText>
+                  <S.CreatedAt>{format(message.createdAt, "he_HE")}</S.CreatedAt>
+                </S.Message>
+              </S.MessageContainer>
+            ))}
           </S.ChatBody>
         </S.ScrollContainer>
       );
-      console.log(messages);
     } else if (isError) {
       console.log(error);
     }

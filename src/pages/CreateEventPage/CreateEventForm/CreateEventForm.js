@@ -16,6 +16,7 @@ import { snackBarContext } from "../../../services/contexts/SnackBar";
 import dayjs from "dayjs";
 import UploadEventCoverImg from "./components/UploadEventCoverImg/UploadEventCoverImg";
 import EventPlace from "./components/EventPlace/EventPlace";
+import { useCreateGroupChatMutation } from "../../../redux/slices/apiSlices/chatApiSlice";
 
 function CreateEventForm() {
   const {
@@ -48,6 +49,8 @@ function CreateEventForm() {
   });
 
   const [createEvent, { isLoading }] = useCreateEventMutation();
+  const [createGroupChat, { isLoading: createGroupChatLoading }] =
+    useCreateGroupChatMutation();
   const { openSnackBar } = useContext(snackBarContext);
   const [errMsg, setErrMsg] = useState();
   const navigate = useNavigate();
@@ -70,6 +73,7 @@ function CreateEventForm() {
     try {
       const event = await createEvent(createEventDataToServer).unwrap();
       openSnackBar("success", `יצרת בהצלחה את האירוע "${event.title}"`);
+      const groupChat = await createGroupChat({ eventId: event._id });
       navigate(`/events/${event.type}/${event._id}`);
     } catch (err) {
       if (err.status === 400) {
@@ -92,7 +96,7 @@ function CreateEventForm() {
 
   const { title, placeName, date, timeStart, timeEnd, description, type } =
     createEventForm;
-  return isLoading ? (
+  return isLoading && createGroupChatLoading ? (
     <Spinner />
   ) : (
     <S.CreateEventForm onSubmit={handleSubmit}>

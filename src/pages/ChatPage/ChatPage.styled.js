@@ -67,6 +67,19 @@ export const RightSideChat = styled.div`
   gap: 1rem;
 `;
 
+export const ChatMenu = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20%;
+`;
+
+export const ChatMenuSpan = styled.span`
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: bold;
+`;
+
 export const ChatBoxEmpyMessage = styled.span`
   display: flex;
   align-self: center;

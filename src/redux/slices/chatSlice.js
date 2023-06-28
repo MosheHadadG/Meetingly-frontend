@@ -1,24 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-  currentChatUserData: null,
+  currentChatData: null,
   numberUnreadChatsData: null,
+  isPrivateMode: true,
 };
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setCurrentChatUserData: (state, action) => {
-      state.currentChatUserData = action.payload;
+    setCurrentChatData: (state, action) => {
+      state.currentChatData = action.payload;
     },
     setNumberUnreadChatsData: (state, action) => {
       state.numberUnreadChatsData = action.payload;
     },
+    setIsPrivateMode: (state, action) => {
+      state.isPrivateMode = action.payload;
+    },
   },
 });
 
-export const { setCurrentChatUserData, setNumberUnreadChatsData } = chatSlice.actions;
+export const { setCurrentChatData, setNumberUnreadChatsData, setIsPrivateMode } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;
 
-export const selectCurrentChatUserData = (state) => state.chat.currentChatUserData;
+export const selectCurrentChatData = (state) => state.chat.currentChatData;
 export const selectNumberUnreadChatsData = (state) => state.chat.numberUnreadChatsData;
+export const selectIsPrivateMode = (state) => state.chat.isPrivateMode;
