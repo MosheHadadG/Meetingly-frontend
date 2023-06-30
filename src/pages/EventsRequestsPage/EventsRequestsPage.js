@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useInfintyScroll from "../../hooks/useInfintyScroll";
+import { useNavigate } from "react-router-dom";
+import * as S from "./EventsRequestsPage.styled";
+import RequestCard from "./components/NotificationCard/RequestCard";
+import RequestCardSkeleton from "./components/NotificationCard/RequestCardSkeleton";
+
 import {
   authApiSlice,
   useGetUserEventsRequestsQuery,
@@ -13,27 +17,26 @@ import {
   selectMakeEventsRequestsRefetch,
   setMakeEventsRequestsRefetch,
   selectTotalEventsRequests,
-  isLoading,
-  selectCurrentSocket,
 } from "../../redux/slices/authSlice";
-import * as S from "./EventsRequestsPage.styled";
-import RequestCard from "./components/NotificationCard/RequestCard";
-import RequestCardSkeleton from "./components/NotificationCard/RequestCardSkeleton";
-import { EVENTS_REQUESTS } from "../../routes/CONSTANTS";
-import { useNavigate } from "react-router-dom";
-import Spinner from "../../components/Spinner/Spinner";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
+import { EVENTS_REQUESTS } from "../../routes/CONSTANTS";
+import useInfintyScroll from "../../hooks/useInfintyScroll";
 
 const options = {
   root: null,
   rootMargin: "0px 0px -150px 0px",
-  thresold: 0,
+  threshold: 0,
 };
 
 function EventsRequestsPage({ fromNotificationsPage }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const eventsRequestsPage = useSelector(selectCurrentEventsRequestsPage);
   const makeEventsRequestsRefetch = useSelector(selectMakeEventsRequestsRefetch);
   const totalEventsRequests = useSelector(selectTotalEventsRequests);
+  const isDesktop = useSelector(selectIsDesktop);
+
   const { setLastElement } = useInfintyScroll({
     increasePage: increaseEventsRequestsPage,
     options,
@@ -44,34 +47,22 @@ function EventsRequestsPage({ fromNotificationsPage }) {
     data: eventsRequestsData,
     isSuccess,
     isFetching,
-    isLoading,
-    refetch,
-    isError,
-    error,
   } = useGetUserEventsRequestsQuery(
     { page: eventsRequestsPage },
     { skip: makeEventsRequestsRefetch }
   );
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  // const [noFoundMsg, setNoFoundMsg] = useState(null);
-
-  const socket = useSelector(selectCurrentSocket);
-  const isDesktop = useSelector(selectIsDesktop);
-
-  // update total events requests
+  // Update total events requests
   useEffect(() => {
     if (eventsRequestsData?.status === "NoFound") {
       dispatch(setTotalEventsRequests(null));
     } else if (eventsRequestsData && !totalEventsRequests) {
-      console.log(eventsRequestsData);
       dispatch(setTotalEventsRequests(eventsRequestsData.totalEventsRequests));
     }
   }, [eventsRequestsData]);
 
+  // make Refetch if user made a decicion and coponent did unmount.
   useEffect(() => {
-    // make Refetch if user made a decicion and coponent did unmount.
     if (makeEventsRequestsRefetch) {
       dispatch(
         authApiSlice.endpoints.getUserEventsRequests.initiate(
@@ -85,53 +76,38 @@ function EventsRequestsPage({ fromNotificationsPage }) {
   }, [makeEventsRequestsRefetch]);
 
   const renderEventsRequests = () => {
-    if (isSuccess) {
-      if (eventsRequestsData.status === "success") {
-        const { eventsRequests } = eventsRequestsData;
+    if (isSuccess && eventsRequestsData?.status === "success") {
+      const { eventsRequests } = eventsRequestsData;
 
-        switch (!!fromNotificationsPage) {
-          case true:
-            if (isFetching) return null;
-            return (
-              <RequestCard
-                request={eventsRequests[0]}
-                withoutBoxShadow
-                fromNotificationsPage={fromNotificationsPage}
-              />
-            );
-
-          case false:
-            return eventsRequests.map((eventRequest, idx) => {
-              return (
-                <RequestCard
-                  requestRef={setLastElement}
-                  key={eventRequest._id}
-                  request={eventRequest}
-                />
-              );
-            });
-        }
-      }
-    } else if (isError) {
-      if (error.originalStatus === 404) {
-        console.log(error.data);
-        // setNoFoundMsg(error.data);
+      if (fromNotificationsPage) {
+        if (isFetching) return null;
+        return (
+          <RequestCard
+            request={eventsRequests[0]}
+            withoutBoxShadow
+            fromNotificationsPage={fromNotificationsPage}
+          />
+        );
+      } else {
+        return eventsRequests.map((eventRequest) => (
+          <RequestCard
+            requestRef={setLastElement}
+            key={eventRequest._id}
+            request={eventRequest}
+          />
+        ));
       }
     }
   };
 
-  const renderrenderEventsRequestsSkeleton = () => {
+  const renderEventsRequestsSkeleton = () => {
     if (isFetching) {
-      switch (!!fromNotificationsPage) {
-        case true:
-          return <RequestCardSkeleton withoutBoxShadow />;
-
-        case false:
-          return Array(eventsRequestsPage === 1 ? 10 : 2)
-            .fill(0)
-            .map((_, idx) => {
-              return <RequestCardSkeleton key={idx} />;
-            });
+      if (fromNotificationsPage) {
+        return <RequestCardSkeleton withoutBoxShadow />;
+      } else {
+        return Array(eventsRequestsPage === 1 ? 10 : 2)
+          .fill(0)
+          .map((_, idx) => <RequestCardSkeleton key={idx} />);
       }
     }
   };
@@ -151,12 +127,13 @@ function EventsRequestsPage({ fromNotificationsPage }) {
           </S.TotalEventsRequests>
         )}
       </S.RequestsHeader>
+
       {eventsRequestsData?.status === "NoFound" ? (
         <S.NoFoundParagraph>{eventsRequestsData.statusMessage}</S.NoFoundParagraph>
       ) : (
         <>
           {renderEventsRequests()}
-          {renderrenderEventsRequestsSkeleton()}
+          {renderEventsRequestsSkeleton()}
         </>
       )}
     </S.Container>

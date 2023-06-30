@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import CardSubHeader from "./components/CardSubHeader/CardSubHeader";
-import * as S from "./EventOwnerSubHeader.styled";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LinkIcon from "@mui/icons-material/Link";
+import CardSubHeader from "../CardSubHeader/CardSubHeader";
+import * as S from "../../EventSubHeader.styled";
 import EditIcon from "@mui/icons-material/Edit";
 import ShareIcon from "@mui/icons-material/Share";
-import EmailIcon from "@mui/icons-material/Email";
 import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
-import { dialogContext } from "../../../../services/contexts/Dialog";
-import EditEvent from "./components/EditEvent/EditEvent";
-import RemoveParticipants from "./components/RemoveParticipants/RemoveParticipants";
-import { useLocation } from "react-router-dom";
-function EventOwnerSubHeader({ event }) {
+import { dialogContext } from "../../../../../../services/contexts/Dialog";
+import EditEvent from "../EditEvent/EditEvent";
+import RemoveParticipants from "../RemoveParticipants/RemoveParticipants";
+import ForumIcon from "@mui/icons-material/Forum";
+import { useNavigate } from "react-router-dom";
+import { CHAT } from "../../../../../../routes/CONSTANTS";
+
+function EventOwnerSubHeader({ event, groupChat }) {
   const { openDialog, closeDialog, setUpdatedDialogContent, dialogDetails } =
     useContext(dialogContext);
-
   const [copySuccess, setCopySuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   const updateDialogContent = () => {
     switch (dialogDetails.dialogId) {
@@ -25,19 +26,16 @@ function EventOwnerSubHeader({ event }) {
     }
   };
 
+  const copyToClip = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    setCopySuccess(true);
+  };
+
   useEffect(() => {
     if (event) {
       updateDialogContent();
     }
   }, [event]);
-
-  async function copyToClip() {
-    await navigator.clipboard.writeText(window.location.href);
-    setCopySuccess(true);
-    // setTimeout(() => {
-    //   setCopySuccess(false);
-    // }, 3000);
-  }
 
   return (
     <S.Container>
@@ -61,17 +59,9 @@ function EventOwnerSubHeader({ event }) {
         handleClick={copyToClip}
       />
       <CardSubHeader
-        text={"הזמנת חברים"}
-        icon={<EmailIcon />}
-        handleClick={() =>
-          openDialog({
-            title: "הזמן חברים",
-            content: "שלח בווצאפ או במייל",
-            id: "InviteFriends",
-            // action: "בטל השתתפות באירוע",
-            // callback: editEventClicked,
-          })
-        }
+        text={"צ'אט קבוצתי"}
+        icon={<ForumIcon />}
+        handleClick={() => navigate(CHAT, { state: { currentChat: groupChat.chat } })}
       />
       <CardSubHeader
         text={"הסרת משתתפים"}
@@ -82,9 +72,6 @@ function EventOwnerSubHeader({ event }) {
             content: <RemoveParticipants event={event} closeDialog={closeDialog} />,
             type: "componentContent",
             id: "RemovingParticipants",
-            // action: "שמור שינויים",
-
-            // callback: editEventClicked,
           })
         }
       />

@@ -1,4 +1,22 @@
-import styled from "styled-components/macro";
+import styled, { keyframes, css } from "styled-components/macro";
+import { Favorite } from "@mui/icons-material";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const blinkAnimationCss = css`
+  animation: ${blinkAnimation} 3s;
+`;
 
 export const Container = styled.div`
   width: 150px;
@@ -13,7 +31,24 @@ export const FavoriteIconContainer = styled.div`
   position: absolute;
   top: 3%;
   right: 5%;
+  display: inline-block;
+  cursor: pointer;
 `;
+
+export const FavoriteIcon = styled(Favorite)`
+  font-size: 30px !important;
+  color: ${({ isloading }) => (isloading ? "#e22d2d" : "#e22d2d")};
+  ${({ isloading }) => (isloading ? blinkAnimationCss : "")};
+  animation-fill-mode: forwards;
+`;
+
+export const FavoriteBorderIcon = styled(FavoriteBorderOutlinedIcon)`
+  font-size: 30px !important;
+  color: ${({ isloading }) => (isloading ? "" : "")};
+  ${({ isloading }) => (isloading ? blinkAnimationCss : "")};
+  animation-fill-mode: forwards;
+`;
+
 export const ImgWrapper = styled.div`
   width: 100%;
   height: 100%;

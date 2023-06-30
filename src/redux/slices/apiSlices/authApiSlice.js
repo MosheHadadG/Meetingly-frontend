@@ -98,7 +98,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: { ...userDecisionData },
       }),
-      invalidatesTags: ["NotificationsCounter"],
+      invalidatesTags: ["NotificationsCounter", "Event"],
     }),
 
     // Favorites

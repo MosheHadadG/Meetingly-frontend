@@ -21,14 +21,19 @@ const ChatPage = () => {
     data: userChats,
     isLoading,
     isSuccess,
-    isFetching,
-    isError,
-    error,
   } = useGetUserChatsQuery({ type: isPrivateMode ? "private" : "group" });
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (location?.state?.currentChat) {
+      const { currentChat } = location.state;
+      const isPrivateMode = currentChat.type === "private";
+      dispatch(setIsPrivateMode(isPrivateMode));
+    }
+  }, []);
 
   useEffect(() => {
     if (userChats && location?.state?.currentChat) {
@@ -49,8 +54,8 @@ const ChatPage = () => {
       .map((_, idx) => <ConversationCardSkeleton key={idx} />);
 
   const handleClickChatMenu = (boolean) => {
-    dispatch(setIsPrivateMode(boolean));
     setCurrentChat(null);
+    dispatch(setIsPrivateMode(boolean));
   };
 
   const renderConversations = () => {
@@ -85,6 +90,9 @@ const ChatPage = () => {
                 קבוצתי
               </S.ChatMenuSpan>
             </S.ChatMenu>
+            {userChats?.status === "NoFound" && (
+              <S.NoFoundParagraph>{userChats.statusMessage}</S.NoFoundParagraph>
+            )}
             <S.ChatList>{renderConversations()}</S.ChatList>
           </S.ChatContainer>
         </S.ScrollContainer>

@@ -1,10 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Avatar } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import * as S from "../../../../../Conversation/Conversation.styled";
 import { Container } from "../../ChatHeader.styled";
+import * as S from "../../../../../Conversation/Conversation.styled";
+
 function ChatGroupHeader({ isDesktop, handleClick, currentChatData }) {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <S.Conversation>
@@ -13,7 +17,11 @@ function ChatGroupHeader({ isDesktop, handleClick, currentChatData }) {
             <ArrowForwardIosIcon />
           </div>
         )}
-        <S.UserContainer>
+        <S.UserContainer
+          onClick={() =>
+            navigate(`/events/${currentChatData.type}/${currentChatData._id}`)
+          }
+        >
           <S.AvatarContainer>
             <Avatar
               alt={currentChatData.title}

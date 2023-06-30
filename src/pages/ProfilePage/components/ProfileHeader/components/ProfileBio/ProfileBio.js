@@ -3,7 +3,7 @@ import { dialogContext } from "../../../../../../services/contexts/Dialog";
 import EditProfile from "../EditProfile/EditProfile";
 import BioParagraph from "./components/BioParagraph/BioParagraph";
 import * as S from "./ProfileBio.styled";
-function ProfileBio({ userProfile, isUserLoggedInProfile }) {
+function ProfileBio({ userProfile, isUserLoggedInProfile, isDesktop }) {
   const { openDialog, closeDialog, setUpdatedDialogContent, dialogDetails } =
     useContext(dialogContext);
 
@@ -27,6 +27,7 @@ function ProfileBio({ userProfile, isUserLoggedInProfile }) {
       {isUserLoggedInProfile && (
         <S.EditBioContainer>
           <S.EditProfileButton
+            isDesktop={isDesktop}
             onClick={() => {
               openDialog({
                 title: "עריכת פרופיל",

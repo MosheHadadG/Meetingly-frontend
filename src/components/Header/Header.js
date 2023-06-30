@@ -25,7 +25,6 @@ function Header() {
               alt={user.firstName}
               src={user.avatar}
               sx={{ width: 38, height: 38 }}
-              // onClick={() => navigate(`/profile/${user.username}`)}
             />
             <S.UserMenuArrow>
               <UserMenu username={user.username} />
@@ -38,11 +37,6 @@ function Header() {
               <S.Counter>{totalUnreadChatsData?.totalUnreadChats}</S.Counter>
             )}
           </S.ChatIconContainer>
-
-          {/* <Paragraph
-            text={`היי, ${user.firstName} ${user.lastName}`}
-            justifyContent="flex-start"
-          /> */}
         </S.UserWelcome>
         <S.LogoWrapper>
           <S.Logo onClick={() => navigate(DASHBOARD)} src={MeetinglyLogo} alt="logo" />

@@ -1,18 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { chatApiSlice } from "../redux/slices/apiSlices/chatApiSlice";
-import { selectIsPrivateMode } from "../redux/slices/chatSlice";
 
 const useGetMessagesSocket = ({ socket, userLoggedIn }) => {
   const dispatch = useDispatch();
-  const isPrivateMode = useSelector(selectIsPrivateMode);
 
   useEffect(() => {
     if (!userLoggedIn) return;
 
-    // push new message to cache messages
     socket?.on("getMessage", ({ messageSent }) => {
-      console.log(messageSent);
+      // push new message to cache messages
       dispatch(
         chatApiSlice.util.updateQueryData(
           "getChatMessages",
@@ -27,18 +24,20 @@ const useGetMessagesSocket = ({ socket, userLoggedIn }) => {
       dispatch(
         chatApiSlice.util.updateQueryData(
           "getUserChats",
-          { type: isPrivateMode ? "private" : "group" },
+          { type: messageSent.chatType },
           (userChatsCache) => {
+            const findChat = userChatsCache.chats.find(
+              (chatCache) => chatCache._id === messageSent.chatId
+            );
+            if (!findChat) return dispatch(chatApiSlice.util.invalidateTags(["Chats"]));
             const chats = userChatsCache.chats.map((chatCache) => {
               if (chatCache._id === messageSent.chatId) {
-                console.log(chatCache);
                 return {
                   ...chatCache,
                   lastMessage: messageSent,
                   updatedAt: messageSent.createdAt,
                 };
               }
-
               return chatCache;
             });
 

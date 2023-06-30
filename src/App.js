@@ -1,7 +1,14 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { io } from "socket.io-client";
 import * as S from "./App.styled";
 import RoutesConfig from "./routes/RoutesConfig";
-import { useSelector } from "react-redux";
+import Spinner from "./components/Spinner/Spinner";
+import { dialogContext } from "./services/contexts/Dialog";
+import CustomizedDialog from "./components/Dialog/Dialog";
+import { subDialogContext } from "./services/contexts/SubDialog";
+import { config } from "./Constants";
+import "./utils/timeAgo/he";
 import {
   setIsLoading,
   selectCurrentToken,
@@ -10,26 +17,19 @@ import {
   selectCurrentSocket,
   setUpdatedUser,
   isLoggedIn,
-  setNotificationPage,
   setOnlineUser,
 } from "./redux/slices/authSlice";
-import { useDispatch } from "react-redux";
-import { authApiSlice, useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
-import Spinner from "./components/Spinner/Spinner";
-import "./utils/timeAgo/he";
-import { dialogContext } from "./services/contexts/Dialog";
-import CustomizedDialog from "./components/Dialog/Dialog";
-import { subDialogContext } from "./services/contexts/SubDialog";
-import { io } from "socket.io-client";
+import { useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
 import useGetNumberNotifications from "./hooks/useGetNumberNotifications";
 import useGetNotificationsSocket from "./hooks/useGetNotificationsSocket";
 import useGetEventsRequestsNotificationsSocket from "./hooks/useGetEventsRequestsNotificationsSocket";
 import useIsDesktop from "./hooks/useIsDesktop";
-import { config } from "./Constants";
 import useGetNumberUnreadMessages from "./hooks/useGetNumberUnreadMessages";
 import useGetMessagesSocket from "./hooks/useGetMessagesSocket";
 
 function App() {
+  const dispatch = useDispatch();
+
   const token = useSelector(selectCurrentToken);
   const socket = useSelector(selectCurrentSocket);
   const userLoggedIn = useSelector(isLoggedIn);
@@ -38,18 +38,19 @@ function App() {
   const { closeSubDialog, subDialogIsActive, subDialogDetails } =
     useContext(subDialogContext);
 
-  let name = "LoadUserOnRefresh";
-  const { data: userData, isLoading: loadUserIsLoading } = useLoadUserQuery(name, {
-    skip: !token,
-  });
+  const { data: userData, isLoading: loadUserIsLoading } = useLoadUserQuery(
+    "LoadUserOnRefresh",
+    {
+      skip: !token,
+    }
+  );
+
   useGetNumberNotifications({ userLoggedIn });
   useGetNumberUnreadMessages({ userLoggedIn });
-  // Socket Server Listenerer Get Notifications
   useGetNotificationsSocket({ socket, userLoggedIn });
   useGetEventsRequestsNotificationsSocket({ socket, userLoggedIn });
   useGetMessagesSocket({ socket, userLoggedIn });
   useIsDesktop();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (token) {
@@ -59,12 +60,11 @@ function App() {
 
   useEffect(() => {
     if (userData && token && !userLoggedIn) {
-      // user is not logged in and have user data
-
+      // user is not logged in and the information about him has arrived.
       dispatch(setCredentials({ user: userData.user, token }));
       dispatch(setSocket(io(config.url.SOCKET_URL)));
     } else if (userData && userLoggedIn) {
-      // user already logged in and user data change
+      // user is logged in and the information about him has changed.
       dispatch(setUpdatedUser(userData.user));
     }
   }, [userData, userLoggedIn]);
@@ -81,36 +81,42 @@ function App() {
     }
   }, [socket, userData]);
 
-  return loadUserIsLoading ? (
-    <Spinner />
-  ) : (
+  return (
     <S.Container>
-      <RoutesConfig />
-      {dialogIsActive && (
-        <CustomizedDialog
-          open={dialogIsActive}
-          closeDialog={closeDialog}
-          callback={dialogDetails.dialogCallback}
-          title={dialogDetails.dialogTitle}
-          content={dialogDetails.dialogContent}
-          action={dialogDetails.dialogAction}
-          type={dialogDetails.dialogType}
-          isFullScreenMobile={dialogDetails.isFullScreenMobile}
-          // errMsg={errMsg}
-        />
-      )}
-      {subDialogIsActive && (
-        <CustomizedDialog
-          open={subDialogIsActive}
-          closeDialog={closeSubDialog}
-          callback={subDialogDetails.dialogCallback}
-          title={subDialogDetails.dialogTitle}
-          content={subDialogDetails.dialogContent}
-          action={subDialogDetails.dialogAction}
-          type={subDialogDetails.dialogType}
-          isFullScreenMobile={subDialogDetails.isFullScreenMobile}
-          // errMsg={errMsg}
-        />
+      {loadUserIsLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <RoutesConfig />
+
+          {dialogIsActive && (
+            <CustomizedDialog
+              open={dialogIsActive}
+              closeDialog={closeDialog}
+              callback={dialogDetails.dialogCallback}
+              title={dialogDetails.dialogTitle}
+              content={dialogDetails.dialogContent}
+              action={dialogDetails.dialogAction}
+              type={dialogDetails.dialogType}
+              isFullScreenMobile={dialogDetails.isFullScreenMobile}
+              // errMsg={errMsg}
+            />
+          )}
+
+          {subDialogIsActive && (
+            <CustomizedDialog
+              open={subDialogIsActive}
+              closeDialog={closeSubDialog}
+              callback={subDialogDetails.dialogCallback}
+              title={subDialogDetails.dialogTitle}
+              content={subDialogDetails.dialogContent}
+              action={subDialogDetails.dialogAction}
+              type={subDialogDetails.dialogType}
+              isFullScreenMobile={subDialogDetails.isFullScreenMobile}
+              // errMsg={errMsg}
+            />
+          )}
+        </>
       )}
     </S.Container>
   );

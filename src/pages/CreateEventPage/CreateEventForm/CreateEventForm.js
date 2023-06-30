@@ -1,24 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+
 import Button from "../../../components/Input/Button/Button";
 import Input from "../../../components/Input/Input/Input";
-import { useFormik } from "formik";
-import * as S from "./CreateEventForm.styled";
-import ErrorParagraph from "../../../components/Input/ErrorParagraph/ErrorParagraph";
-import { createEventSchema } from "../../../Validations/CreateEventValidation";
 import TextArea from "../../../components/Input/TextArea/TextArea";
-import { INTERESTS_LIST } from "../../InterestsPage/utils/utils";
 import Select from "../../../components/Input/Select/Select";
-import EventPrivacy from "./components/EventPrivacy/EventPrivacy";
-import { useCreateEventMutation } from "../../../redux/slices/apiSlices/eventsApiSlice";
 import Spinner from "../../../components/Spinner/Spinner";
-import { useNavigate } from "react-router-dom";
-import { snackBarContext } from "../../../services/contexts/SnackBar";
-import dayjs from "dayjs";
+import ErrorParagraph from "../../../components/Input/ErrorParagraph/ErrorParagraph";
 import UploadEventCoverImg from "./components/UploadEventCoverImg/UploadEventCoverImg";
 import EventPlace from "./components/EventPlace/EventPlace";
+import EventPrivacy from "./components/EventPrivacy/EventPrivacy";
+
+import { snackBarContext } from "../../../services/contexts/SnackBar";
+import { useCreateEventMutation } from "../../../redux/slices/apiSlices/eventsApiSlice";
 import { useCreateGroupChatMutation } from "../../../redux/slices/apiSlices/chatApiSlice";
 
+import { createEventSchema } from "../../../Validations/CreateEventValidation";
+import { INTERESTS_LIST } from "../../InterestsPage/utils/utils";
+
+import * as S from "./CreateEventForm.styled";
+
 function CreateEventForm() {
+  const [errMsg, setErrMsg] = useState();
+  const [optionsInterests, setOptionsInterests] = useState([
+    { value: "Default", label: "תחום האירוע", disabled: true },
+  ]);
+
+  const navigate = useNavigate();
+  const { openSnackBar } = useContext(snackBarContext);
+
+  const [createEvent, { isLoading }] = useCreateEventMutation();
+  const [createGroupChat, { isLoading: createGroupChatLoading }] =
+    useCreateGroupChatMutation();
+
   const {
     values: createEventForm,
     handleChange,
@@ -42,22 +57,10 @@ function CreateEventForm() {
       privacy: "",
       coverImgFile: null,
       coverImgSrc: "",
-      // imageSrc: "",
     },
     validationSchema: createEventSchema,
     onSubmit,
   });
-
-  const [createEvent, { isLoading }] = useCreateEventMutation();
-  const [createGroupChat, { isLoading: createGroupChatLoading }] =
-    useCreateGroupChatMutation();
-  const { openSnackBar } = useContext(snackBarContext);
-  const [errMsg, setErrMsg] = useState();
-  const navigate = useNavigate();
-  const [optionsInterests, setOptionsInterests] = useState([
-    { value: "Default", label: "תחום האירוע", disabled: true },
-  ]);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   async function onSubmit() {
     const { date, timeStart, coverImgFile } = createEventForm;
@@ -84,19 +87,19 @@ function CreateEventForm() {
     }
   }
 
-  const interestListToOptions = () => {
-    return INTERESTS_LIST.map((interest) => {
-      return { value: interest.type, label: interest.name };
-    });
-  };
-
   useEffect(() => {
+    const interestListToOptions = () => {
+      return INTERESTS_LIST.map((interest) => {
+        return { value: interest.type, label: interest.name };
+      });
+    };
     setOptionsInterests([...optionsInterests, ...interestListToOptions()]);
   }, []);
 
   const { title, placeName, date, timeStart, timeEnd, description, type } =
     createEventForm;
-  return isLoading && createGroupChatLoading ? (
+
+  return isLoading ? (
     <Spinner />
   ) : (
     <S.CreateEventForm onSubmit={handleSubmit}>
@@ -113,7 +116,6 @@ function CreateEventForm() {
           type="text"
           placeHolder="שם האירוע"
           name="title"
-          // boxShadow
           value={title}
           handleChange={handleChange}
           handleBlur={handleBlur}
@@ -134,7 +136,6 @@ function CreateEventForm() {
           type="text"
           placeHolder="תאריך"
           name="date"
-          // boxShadow
           onFocus={(e) => (e.target.type = "date")}
           value={date}
           handleChange={handleChange}
@@ -142,6 +143,7 @@ function CreateEventForm() {
           error={errors.date && touched.date}
         />
         {errors.date && touched.date && <ErrorParagraph text={errors.date} />}
+
         <S.TimeInputs>
           <S.TimeInput>
             <Input
@@ -150,7 +152,6 @@ function CreateEventForm() {
               type="text"
               placeHolder="שעת התחלה"
               name="timeStart"
-              // boxShadow
               onFocus={(e) => (e.target.type = "time")}
               value={timeStart}
               handleChange={handleChange}
@@ -168,7 +169,6 @@ function CreateEventForm() {
               type="text"
               placeHolder="שעת סיום"
               name="timeEnd"
-              // boxShadow
               onFocus={(e) => (e.target.type = "time")}
               value={timeEnd}
               handleChange={handleChange}
@@ -184,7 +184,6 @@ function CreateEventForm() {
         <TextArea
           placeHolder="תיאור האירוע"
           name="description"
-          // boxShadow
           value={description}
           handleChange={handleChange}
           handleBlur={handleBlur}
@@ -217,6 +216,7 @@ function CreateEventForm() {
 
         <S.ButtonContainer>
           <Button
+            isDisabled={isLoading || createGroupChatLoading}
             text="צור אירוע"
             color="var(--color-primary-purple)"
             type="submit"

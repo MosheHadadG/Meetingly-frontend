@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react";
-import * as S from "./ProfilePage.styled";
+import React from "react";
 import { useParams } from "react-router-dom";
-import Spinner from "../../components/Spinner/Spinner";
-import { useGetUserByUsernameQuery } from "../../redux/slices/apiSlices/authApiSlice";
-import ProfileHeader from "./components/ProfileHeader/ProfileHeader";
 import { useSelector } from "react-redux";
+import * as S from "./ProfilePage.styled";
+import Spinner from "../../components/Spinner/Spinner";
+import ProfileHeader from "./components/ProfileHeader/ProfileHeader";
+import ProfileEvents from "./components/ProfileEvents/ProfileEvents";
+import { useGetUserByUsernameQuery } from "../../redux/slices/apiSlices/authApiSlice";
 import { selectCurrentUser } from "../../redux/slices/authSlice";
 import { isUserLoggedInProfile } from "./utils/profile.utils";
-import ProfileEvents from "./components/ProfileEvents/ProfileEvents";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
 
 function ProfilePage() {
   const { username } = useParams();
-  const {
-    data: userProfile,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetUserByUsernameQuery(username);
+  const userProfileQuery = useGetUserByUsernameQuery(username);
   const userLoggedIn = useSelector(selectCurrentUser);
   const isDesktop = useSelector(selectIsDesktop);
 
   const renderProfile = () => {
+    const { data: userProfile, isLoading, isSuccess } = userProfileQuery;
+
     if (isLoading) {
       return <Spinner />;
     } else if (isSuccess) {
@@ -42,10 +38,6 @@ function ProfilePage() {
               userProfile._id
             )}
           />
-          {/* <EventDetails date={date} time={time} place={place} />
-            <EventDescription description={description} />
-            <EventOwner />
-            <EventParticipants /> */}
         </>
       );
     }

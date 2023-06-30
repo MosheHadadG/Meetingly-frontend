@@ -124,7 +124,7 @@ function DashboardPage() {
         userLoggedIn={userLoggedIn}
       />
 
-      <SortEvents sortedEventsBy={sortedEventsBy} />
+      <SortEvents isDesktop={isDesktop} sortedEventsBy={sortedEventsBy} />
       <S.Events>{renderEvents()}</S.Events>
     </S.Container>
   );

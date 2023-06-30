@@ -25,6 +25,7 @@ export const eventsApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { ...createEventForm },
       }),
+      invalidatesTags: ["Events"],
     }),
     uploadEventCoverImg: builder.mutation({
       query: (formData) => ({

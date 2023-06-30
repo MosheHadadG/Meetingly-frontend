@@ -3,22 +3,19 @@ import { useSelector } from "react-redux";
 import Button from "../../../../components/Input/Button/Button";
 import Spinner from "../../../../components/Spinner/Spinner";
 import { selectCurrentSocket } from "../../../../redux/slices/authSlice";
-import {
-  useGetEventByIdQuery,
-  useUserCancelParticipationMutation,
-} from "../../../../redux/slices/apiSlices/eventsApiSlice";
+import { useUserCancelParticipationMutation } from "../../../../redux/slices/apiSlices/eventsApiSlice";
 import { dialogContext } from "../../../../services/contexts/Dialog";
 import { snackBarContext } from "../../../../services/contexts/SnackBar";
 import * as S from "./EventCancelParticipation.styled";
+import { useRemoveMemberFromChatMutation } from "../../../../redux/slices/apiSlices/chatApiSlice";
 
-function EventCancelParticipation({ title, eventId }) {
-  const [userCancelParticipation, { isLoading, isSuccess }] =
-    useUserCancelParticipationMutation();
-
+const EventCancelParticipation = ({ title, eventId }) => {
+  const socket = useSelector(selectCurrentSocket);
   const { openSnackBar } = useContext(snackBarContext);
   const { openDialog, closeDialog } = useContext(dialogContext);
-  const [errMsg, setErrMsg] = useState();
-  const socket = useSelector(selectCurrentSocket);
+  const [userCancelParticipation, { isLoading, isSuccess }] =
+    useUserCancelParticipationMutation();
+  const [removeMemberFromChat] = useRemoveMemberFromChatMutation();
 
   const handleJoinEvent = async () => {
     try {
@@ -32,6 +29,7 @@ function EventCancelParticipation({ title, eventId }) {
         notification: userCanceledParticipation.notification,
         type: "ParticipantsEventChanged",
       });
+      await removeMemberFromChat({ eventId });
     } catch (err) {
       if (err.status === 400) {
         openSnackBar("error", err.data.error);
@@ -41,9 +39,11 @@ function EventCancelParticipation({ title, eventId }) {
     }
   };
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return (
     <S.Container>
       <Button
         text="בטל השתתפות באירוע"
@@ -61,6 +61,6 @@ function EventCancelParticipation({ title, eventId }) {
       />
     </S.Container>
   );
-}
+};
 
 export default EventCancelParticipation;

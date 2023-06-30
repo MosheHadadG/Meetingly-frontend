@@ -8,6 +8,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   gap: 5px;
+  cursor: pointer;
 `;
 export const CardSubHeaderCircle = styled.div`
   background: ${({ backgroundColor }) => backgroundColor || "#e4e6eb"};

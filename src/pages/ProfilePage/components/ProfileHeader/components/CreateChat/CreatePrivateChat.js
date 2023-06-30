@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../../../../../components/Spinner/Spinner";
 import { useCreatePrivateChatMutation } from "../../../../../../redux/slices/apiSlices/chatApiSlice";
 import { CHAT } from "../../../../../../routes/CONSTANTS";
+import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import * as S from "./CreatePrivateChat.styled";
 
-function CreatePrivateChat({ userProfile }) {
+function CreatePrivateChat({ isDesktop, userProfile }) {
   const [createPrivateChat, { isLoading }] = useCreatePrivateChatMutation();
   const navigate = useNavigate();
 
@@ -26,7 +27,12 @@ function CreatePrivateChat({ userProfile }) {
     }
   };
 
-  return <S.CreateChatButton onClick={handleCreateChat}>התחל שיחה</S.CreateChatButton>;
+  return (
+    <S.CreateChatButton isDesktop={isDesktop} onClick={handleCreateChat}>
+      <S.CreateChatSpan>שלח הודעה</S.CreateChatSpan>
+      <MessageOutlinedIcon sx={{ fontSize: "1.3rem" }} />
+    </S.CreateChatButton>
+  );
 }
 
 export default CreatePrivateChat;

@@ -16,26 +16,11 @@ import {
   CHAT,
 } from "./CONSTANTS";
 
-import SnackBarProvider from "../services/contexts/SnackBar";
 import RegistrationProvider from "../services/contexts/Registeration";
 import PrivateRoutes from "./Auth/PrivateRoutes";
 import Spinner from "../components/Spinner/Spinner";
 import PublicRoutes from "./Auth/PublicRoutes";
 import ProfilePage from "../pages/ProfilePage/ProfilePage";
-// import FavoritesPage from "../pages/FavoritesPage/FavoritesPage";
-
-// import RestPasswordPage from "../pages/RestPasswordPage/RestPasswordPage";
-// import HomePage from "../pages/HomePage/HomePage";
-// import OnBoardingPage from "../pages/OnBoardingPage/OnBoardingPage";
-// import LoginPage from "../pages/LoginPage/LoginPage";
-// import RegisterPage from "../pages/RegisterPage/RegisterPage";
-// import InterestsPage from "../pages/InterestsPage/InterestsPage";
-// import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
-// import DashboardPage from "../pages/DashboardPage/DashboardPage";
-// import EventPage from "../pages/EventPage/EventPage";
-// import CreateEventPage from "../pages/CreateEventPage/CreateEventPage";
-// import NotificationsPage from "../pages/NotificationsPage/NotificationsPage";
-// import CalendarPage from "../pages/CalendarPage/CalendarPage";
 
 const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
 const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
@@ -44,7 +29,6 @@ const RestPasswordPage = lazy(() => import("../pages/RestPasswordPage/RestPasswo
 const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage/NotFoundPage"));
 const EventPage = lazy(() => import("../pages/EventPage/EventPage"));
-// const ProfilePage = lazy(() => import("../pages/ProfilePage/ProfilePage"));
 const CalendarPage = lazy(() => import("../pages/CalendarPage/CalendarPage"));
 const InterestsPage = lazy(() => import("../pages/InterestsPage/InterestsPage"));
 const DashboardPage = lazy(() => import("../pages/DashboardPage/DashboardPage"));

@@ -6,8 +6,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
   useAddEventToFavoritesMutation,
   useRemoveEventFromFavoritesMutation,
@@ -55,11 +53,11 @@ function CardEvent({ eventId, imageSrc, title, place, date, time, alt, clickedEv
 
         {userLoggedIn.favoriteEvents.includes(eventId) ? (
           <S.FavoriteIconContainer onClick={(e) => removeFromFavorites(e)}>
-            <FavoriteIcon sx={{ fontSize: 30, color: "#e22d2d" }} />
+            <S.FavoriteIcon isloading={+(addIsLoading || removeIsLoading)} />
           </S.FavoriteIconContainer>
         ) : (
           <S.FavoriteIconContainer onClick={(e) => addToFavorites(e)}>
-            <FavoriteBorderIcon sx={{ fontSize: 30 }} />
+            <S.FavoriteBorderIcon isloading={+(addIsLoading || removeIsLoading)} />
           </S.FavoriteIconContainer>
         )}
 

@@ -12,7 +12,7 @@ import "./SortEventsMui.css";
 const theme = createTheme({
   direction: "rtl",
 });
-export default function SortEvents({ sortedEventsBy }) {
+export default function SortEvents({ sortedEventsBy, isDesktop }) {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -24,7 +24,8 @@ export default function SortEvents({ sortedEventsBy }) {
       <ThemeProvider theme={theme}>
         <Box
           sx={{
-            width: "30%",
+            width: isDesktop ? "20%" : "30%",
+            marginLeft: isDesktop ? "20px" : "unset",
             height: "100%",
           }}
         >
@@ -33,6 +34,7 @@ export default function SortEvents({ sortedEventsBy }) {
               variant="standard"
               htmlFor="uncontrolled-native"
               sx={{
+                width: "20%",
                 right: 0,
                 top: 7,
                 transformOrigin: "unset",

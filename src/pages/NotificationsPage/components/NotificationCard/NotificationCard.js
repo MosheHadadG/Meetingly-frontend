@@ -17,7 +17,13 @@ function NotificationCard({ notification, notificationRef }) {
       bgcolor="background.paper"
       m={0}
       p={1}
-      style={{ width: "100%", height: 80, padding: "0" }}
+      style={{
+        width: "100%",
+        height: 80,
+        padding: "0",
+        boxShadow:
+          "rgb(188 131 131 / 20%) 0px 0px 0px -1px, rgba(0, 0, 0, 0.14) 0px 0px 0px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px",
+      }}
     >
       <S.Container ref={notificationRef} isRead={notification.isRead}>
         <S.NotificationSetting>

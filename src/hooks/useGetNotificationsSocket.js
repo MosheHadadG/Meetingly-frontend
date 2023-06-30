@@ -15,7 +15,10 @@ const useGetNotificationsSocket = ({ socket, userLoggedIn }) => {
           "getUserNotifications",
           undefined,
           (cacheNotifications) => {
-            if (!cacheNotifications.notifications) {
+            if (
+              !cacheNotifications.notifications ||
+              cacheNotifications.notifications.length <= 0
+            ) {
               dispatch(
                 authApiSlice.endpoints.getUserNotifications.initiate(
                   { page: 1 },
@@ -31,10 +34,10 @@ const useGetNotificationsSocket = ({ socket, userLoggedIn }) => {
         )
       );
       if (notificationData.type === "requestDecision") {
-        dispatch(authApiSlice.util.invalidateTags(["User", "Event"]));
+        dispatch(authApiSlice.util.invalidateTags(["User", "Event", "Chats"]));
       }
       if (notificationData.type === "ParticipantsEventChanged") {
-        dispatch(authApiSlice.util.invalidateTags(["Event"]));
+        dispatch(authApiSlice.util.invalidateTags(["Event", "Chats"]));
       }
       dispatch(authApiSlice.util.invalidateTags(["NotificationsCounter"]));
     });

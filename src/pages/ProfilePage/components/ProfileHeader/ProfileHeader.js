@@ -1,16 +1,14 @@
-import { Avatar } from "@mui/material";
-import React, { useContext } from "react";
+import React from "react";
 import * as S from "./profileHeader.styled";
-import EditIcon from "@mui/icons-material/Edit";
-import CardSubHeader from "../../../EventPage/components/EventOwnerSubHeader/components/CardSubHeader/CardSubHeader";
-import ButtonUploadFile from "../../../../components/Input/ButtonUploadFile/ButtonUploadFile";
-import { dialogContext } from "../../../../services/contexts/Dialog";
-import EditProfile from "./components/EditProfile/EditProfile";
 import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
 import ProfileBio from "./components/ProfileBio/ProfileBio";
 import CreatePrivateChat from "./components/CreateChat/CreatePrivateChat";
+import { useSelector } from "react-redux";
+import { selectIsDesktop } from "../../../../redux/slices/uiSlice";
 
 function ProfileHeader({ userProfile, isUserLoggedInProfile }) {
+  const isDesktop = useSelector(selectIsDesktop);
+
   return (
     <S.Container>
       <S.ProfileAvatarName>
@@ -22,10 +20,13 @@ function ProfileHeader({ userProfile, isUserLoggedInProfile }) {
         </S.FullNameSpan>
       </S.ProfileAvatarName>
       <ProfileBio
+        isDesktop={isDesktop}
         userProfile={userProfile}
         isUserLoggedInProfile={isUserLoggedInProfile}
       />
-      {!isUserLoggedInProfile && <CreatePrivateChat userProfile={userProfile} />}
+      {!isUserLoggedInProfile && (
+        <CreatePrivateChat isDesktop={isDesktop} userProfile={userProfile} />
+      )}
     </S.Container>
   );
 }

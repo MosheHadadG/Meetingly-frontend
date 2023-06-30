@@ -11,8 +11,8 @@ import EventDescription from "./components/EventDescription/EventDescription";
 import EventOwner from "./components/EventOwner/EventOwner";
 import EventParticipants from "./components/EventParticipants/EventParticipants";
 import EventJoining from "./components/EventJoining/EventJoining";
-import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentSocket, selectCurrentUser } from "../../redux/slices/authSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../redux/slices/authSlice";
 import EventCancelParticipation from "./components/EventCancelParticipation/EventCancelParticipation";
 import {
   eventAlreadyOver,
@@ -20,23 +20,15 @@ import {
   userAlreadyParticipatingEvent,
   UserLoggedInIsOwnerEvent,
 } from "./utils/eventPage.utils";
-import EventOwnerSubHeader from "./components/EventOwnerSubHeader/EventOwnerSubHeader";
-import { authApiSlice } from "../../redux/slices/apiSlices/authApiSlice";
+import EventOwnerSubHeader from "./components/EventOwnerSubHeader/components/EventOwnerSubHeader/EventOwnerSubHeader";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
-// import EventSettings from "./components/EventSettings/EventOwnerSettings";
+import EventSubHeader from "./components/EventOwnerSubHeader/EventSubHeader";
 
 function EventPage() {
   const { eventId } = useParams();
   const userLoggedIn = useSelector(selectCurrentUser);
 
-  const {
-    data: eventsData,
-    isLoading,
-    isSuccess,
-    refetch: refetchEvent,
-    isError,
-    error,
-  } = useGetEventByIdQuery(eventId);
+  const { data: eventsData, isLoading, isSuccess } = useGetEventByIdQuery(eventId);
 
   const isDesktop = useSelector(selectIsDesktop);
 
@@ -61,10 +53,19 @@ function EventPage() {
       const { username, avatar } = eventOwnerDetails;
       return (
         <>
-          <EventHeader title={title} imageSrc={imageSrc} />
-          {UserLoggedInIsOwnerEvent(userLoggedIn._id, ownerEventId) && (
-            <EventOwnerSubHeader event={event} />
+          <EventHeader title={title} imageSrc={imageSrc} isDesktop={isDesktop} />
+
+          {(UserLoggedInIsOwnerEvent(userLoggedIn._id, ownerEventId) ||
+            userAlreadyParticipatingEvent(participants, userLoggedIn._id)) && (
+            <EventSubHeader
+              event={event}
+              userLoggedInIsOwnerEvent={UserLoggedInIsOwnerEvent(
+                userLoggedIn._id,
+                ownerEventId
+              )}
+            />
           )}
+
           <EventDetails
             privacy={privacy}
             date={date}

@@ -16,7 +16,7 @@ export const EventTitle = styled.p`
 
 export const WrapperImg = styled.div`
   width: 100%;
-  height: 220px;
+  height: ${({ isDesktop }) => (isDesktop ? "280px" : "220px")};
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   position: relative;
 `;
@@ -25,6 +25,7 @@ export const EventImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: ${({ isDesktop }) => isDesktop && "5px"};
 `;
 
 export const EditEventImgWrapper = styled.div`

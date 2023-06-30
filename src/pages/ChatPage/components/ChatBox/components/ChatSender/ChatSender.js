@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputEmoji from "react-input-emoji";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../../../../components/Input/Button/Button";
@@ -20,11 +20,11 @@ function ChatSender({ chat, userLoggedIn }) {
     setNewMessage(newMessage);
   };
 
-  const handleSend = async (e) => {
-    // e.preventDefault();
+  const handleSend = async () => {
     const messageData = {
       chatId: chat._id,
       text: newMessage,
+      chatType: chat.type,
     };
     try {
       const messageSent = await addMessage(messageData);
@@ -87,8 +87,8 @@ function ChatSender({ chat, userLoggedIn }) {
       <Button
         text="שלח"
         color="var(--color-primary-purple)"
-        width={"20%"}
-        fontSize={"1.2rem"}
+        width="20%"
+        fontSize="1.2rem"
         handleClick={handleSend}
       />
     </S.Container>

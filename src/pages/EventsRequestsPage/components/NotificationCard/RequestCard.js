@@ -1,21 +1,18 @@
-import { Avatar } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import * as S from "./RequestCard.styled";
+import { format } from "timeago.js";
+import { Avatar } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@material-ui/core/Box";
 import { useNavigate } from "react-router-dom";
-import { format } from "timeago.js";
 import Button from "../../../../components/Input/Button/Button";
+import Spinner from "../../../../components/Spinner/Spinner";
 import {
-  authApiSlice,
-  useEventRequestUserDecisionMutation,
-} from "../../../../redux/slices/apiSlices/authApiSlice";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectCurrentSocket,
   setMakeEventsRequestsRefetch,
   setTotalEventsRequests,
+  selectCurrentSocket,
 } from "../../../../redux/slices/authSlice";
-import Spinner from "../../../../components/Spinner/Spinner";
+import { useEventRequestUserDecisionMutation } from "../../../../redux/slices/apiSlices/authApiSlice";
+import * as S from "./RequestCard.styled";
 
 function RequestCard({ request, requestRef, withoutBoxShadow, fromNotificationsPage }) {
   const { content, createdAt, sender, refType, _id: requestId } = request;
@@ -42,7 +39,6 @@ function RequestCard({ request, requestRef, withoutBoxShadow, fromNotificationsP
 
   useEffect(() => {
     if (userDecision) {
-      console.log(refType);
       madeDecisionRef.current = true;
       const sendUserDecision = async () => {
         const userDecisionData = {
@@ -63,22 +59,12 @@ function RequestCard({ request, requestRef, withoutBoxShadow, fromNotificationsP
             setTotalEventsRequests(totalEventsRequests <= 0 ? null : totalEventsRequests)
           );
           setMsg(message);
-          console.log(participantEventNotification);
-          // real time socket.io
           socket?.emit("sendNotification", {
             notification: participantEventNotification,
             type: "requestDecision",
           });
         } catch (err) {
           console.log(err);
-          //   console.log(err?.data?.error);
-          //   if (err.status === 400) {
-          //     setErrMsg(err.data.error);
-          //   } else {
-          //     console.log(err.status);
-          //     setErrMsg("תקלה בשרתים שלנו");
-          //   }
-          // }
         }
       };
       sendUserDecision();
@@ -95,15 +81,12 @@ function RequestCard({ request, requestRef, withoutBoxShadow, fromNotificationsP
         p={1}
         style={{ width: "100%", height: "125px", padding: "0" }}
       >
-        <S.Container
-          ref={requestRef}
-          // onClick={() => navigate(`/events/${refType.type}/${refType._id}`)}
-        >
+        <S.Container ref={requestRef}>
           <S.RequestWrapper>
             <S.AvatarContentContainer>
               <S.AvatarWrapper>
                 <Avatar
-                  alt={"name"}
+                  alt="name"
                   src={sender.avatar}
                   sx={{ width: 46, height: 46 }}
                   onClick={() => navigate(`/profile/${sender.username}`)}
@@ -135,7 +118,6 @@ function RequestCard({ request, requestRef, withoutBoxShadow, fromNotificationsP
                 name="REJECTED"
                 color="var(--color-white)"
                 fontColor="var(--color-primary-purple)"
-                // handleClick={handleFormPrev}
               />
             </S.Buttons>
           )}

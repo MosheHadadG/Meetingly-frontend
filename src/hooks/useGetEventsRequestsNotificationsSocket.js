@@ -16,7 +16,10 @@ const useGetEventsRequestsNotificationsSocket = ({ socket, userLoggedIn }) => {
           "getUserEventsRequests",
           undefined,
           (cacheRequests) => {
-            if (!cacheRequests.eventsRequests) {
+            if (
+              !cacheRequests.eventsRequests ||
+              cacheRequests.eventsRequests.length <= 0
+            ) {
               dispatch(
                 authApiSlice.endpoints.getUserEventsRequests.initiate(
                   { page: 1 },

@@ -37,12 +37,20 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const { data: messages, isLoading: s } = useSelector(selectCacheMessages);
 
   useEffect(() => {
-    if (userData && startConversation) {
+    if (isPrivateMode && userData && startConversation) {
       if (startConversation._id === chat._id) {
         dispatch(setCurrentChatData(userData));
       }
     }
-  }, [userData, startConversation]);
+  }, [isPrivateMode, userData, startConversation]);
+
+  useEffect(() => {
+    if (!isPrivateMode && startConversation) {
+      if (startConversation._id === chat._id) {
+        dispatch(setCurrentChatData(chat.eventId));
+      }
+    }
+  }, [isPrivateMode, startConversation]);
 
   const isOnline = (userData) => {
     return onlineUsers.find((onlineUser) => onlineUser.userId === userData._id);
@@ -64,17 +72,23 @@ function Conversation({ chat, isDesktop, handleClick, startConversation }) {
   const renderLastMessage = () => {
     if (messages?.result?.length > 0) {
       let lastMessage = messages.result[messages.result.length - 1];
-      if (lastMessage.senderId._id === userLoggedIn._id) {
+      let { senderId: sender } = lastMessage;
+      if (sender._id === userLoggedIn._id) {
         return `את/ה: ${lastMessage.text}`;
       } else {
-        return lastMessage.text;
+        return isPrivateMode
+          ? lastMessage.text
+          : `${sender.firstName} ${sender.lastName}: ${lastMessage.text}`;
       }
     } else {
       if (chat.lastMessage) {
-        if (chat.lastMessage.senderId._id === userLoggedIn._id) {
-          return `את/ה: ${chat.lastMessage?.text}`;
+        let { senderId: sender } = chat.lastMessage;
+        if (sender._id === userLoggedIn._id) {
+          return `את/ה: ${chat.lastMessage.text}`;
         } else {
-          return chat.lastMessage?.text;
+          return isPrivateMode
+            ? chat.lastMessage.text
+            : `${sender.firstName} ${sender.lastName}: ${chat.lastMessage.text}`;
         }
       } else {
         return null;

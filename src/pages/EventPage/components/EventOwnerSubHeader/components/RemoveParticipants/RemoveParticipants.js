@@ -56,7 +56,6 @@ function RemoveParticipants({ event, closeDialog }) {
           color="var(--color-primary-purple)"
           type="button"
           handleClick={updateParticipantServer}
-          // boxShadow
         />
       </S.ButtonContainer>
     </S.Container>

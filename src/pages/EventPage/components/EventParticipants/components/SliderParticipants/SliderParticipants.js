@@ -8,7 +8,6 @@ import "./ReactSlick.css";
 
 function SliderParticipants({ participants, isRemoveParticipantsMode, setParticipants }) {
   function handleRemoveParticipant(participantId) {
-    console.log(participantId);
     const updatedParticipants = participants.filter(
       (participant) => participant._id !== participantId
     );

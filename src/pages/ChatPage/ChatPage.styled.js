@@ -50,6 +50,8 @@ export const ChatContainer = styled.div`
   padding: 1rem;
   height: auto;
   min-height: 80vh;
+  max-height: 80vh;
+
   overflow-y: ${({ isDesktop }) => (isDesktop ? "unset" : "scroll")};
 `;
 
@@ -87,4 +89,8 @@ export const ChatBoxEmpyMessage = styled.span`
   font-size: 20px;
   position: absolute;
   top: 9%;
+`;
+
+export const NoFoundParagraph = styled.p`
+  text-align: center;
 `;

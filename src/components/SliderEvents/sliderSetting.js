@@ -8,14 +8,14 @@ export const sliderSettings = {
   rtl: true,
   responsive: [
     {
-      breakpoint: 1200,
+      breakpoint: 1400,
       settings: {
         slidesToShow: 3.5,
         slidesToScroll: 3,
       },
     },
     {
-      breakpoint: 1000,
+      breakpoint: 1200,
       settings: {
         slidesToShow: 2.5,
         slidesToScroll: 3,

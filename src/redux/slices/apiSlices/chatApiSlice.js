@@ -22,6 +22,7 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { eventId },
       }),
+      invalidatesTags: ["Chats"],
     }),
 
     addMemberToChat: builder.mutation({
@@ -40,6 +41,10 @@ export const chatApiSlice = apiSlice.injectEndpoints({
         body: { eventId },
       }),
       invalidatesTags: ["Chats"],
+    }),
+
+    findGroupChat: builder.query({
+      query: ({ eventId }) => `/chat/group/find/?eventId=${eventId}`,
     }),
 
     getChatMessages: builder.query({
@@ -77,6 +82,8 @@ export const {
   useCreatePrivateChatMutation,
   useCreateGroupChatMutation,
   useAddMemberToChatMutation,
+  useRemoveMemberFromChatMutation,
+  useFindGroupChatQuery,
   useGetNumberUnreadMessagesQuery,
   useMarkMessagesAsReadMutation,
 } = chatApiSlice;

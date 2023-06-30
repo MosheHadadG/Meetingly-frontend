@@ -22,7 +22,6 @@ const useDialog = () => {
     isFullScreenMobile,
     callback,
   }) => {
-    console.log(title);
     setDialogDetails({
       dialogTitle: title,
       dialogContent: content,
