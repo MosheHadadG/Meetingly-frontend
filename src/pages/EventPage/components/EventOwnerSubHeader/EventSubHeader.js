@@ -22,7 +22,7 @@ function EventSubHeader({ event, userLoggedInIsOwnerEvent }) {
       if (userLoggedInIsOwnerEvent) {
         return <EventOwnerSubHeader event={event} groupChat={groupChat} />;
       } else {
-        return <EventParticipatingSubHeader groupChat={groupChat} />;
+        return <EventParticipatingSubHeader groupChat={groupChat} event={event} />;
       }
     }
   };

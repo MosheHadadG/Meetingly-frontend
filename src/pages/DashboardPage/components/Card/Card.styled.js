@@ -4,13 +4,13 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 
 const blinkAnimation = keyframes`
   0% {
-    opacity: 1;
+    color: #e22d2d;
   }
   50% {
-    opacity: 0;
+    color: unset;
   }
   100% {
-    opacity: 1;
+    color: #e22d2d;
   }
 `;
 
@@ -38,15 +38,23 @@ export const FavoriteIconContainer = styled.div`
 export const FavoriteIcon = styled(Favorite)`
   font-size: 30px !important;
   color: ${({ isloading }) => (isloading ? "#e22d2d" : "#e22d2d")};
-  ${({ isloading }) => (isloading ? blinkAnimationCss : "")};
-  animation-fill-mode: forwards;
+  ${({ isloading }) =>
+    isloading
+      ? css`
+          animation: ${blinkAnimation} 1s infinite linear;
+        `
+      : ""};
 `;
 
 export const FavoriteBorderIcon = styled(FavoriteBorderOutlinedIcon)`
   font-size: 30px !important;
   color: ${({ isloading }) => (isloading ? "" : "")};
-  ${({ isloading }) => (isloading ? blinkAnimationCss : "")};
-  animation-fill-mode: forwards;
+  ${({ isloading }) =>
+    isloading
+      ? css`
+          animation: ${blinkAnimation} 1s infinite linear;
+        `
+      : ""};
 `;
 
 export const ImgWrapper = styled.div`

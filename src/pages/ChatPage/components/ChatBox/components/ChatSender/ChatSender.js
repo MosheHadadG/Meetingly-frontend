@@ -21,6 +21,8 @@ function ChatSender({ chat, userLoggedIn }) {
   };
 
   const handleSend = async () => {
+    if (!newMessage) return;
+
     const messageData = {
       chatId: chat._id,
       text: newMessage,
@@ -90,6 +92,7 @@ function ChatSender({ chat, userLoggedIn }) {
         width="20%"
         fontSize="1.2rem"
         handleClick={handleSend}
+        isDisabled={!newMessage}
       />
     </S.Container>
   );

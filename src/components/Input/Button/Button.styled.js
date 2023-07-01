@@ -24,5 +24,6 @@ export const ButtonContainer = styled.button`
   display: flex;
   justify-content: center;
   gap: 5px;
+
   /* box-shadow: 0 6px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%); */
 `;
