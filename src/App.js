@@ -19,7 +19,6 @@ import {
   isLoggedIn,
   setOnlineUsers,
 } from "./redux/slices/authSlice";
-import { selectIsDesktop } from "./redux/slices/uiSlice";
 import { useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
 import useGetNumberNotifications from "./hooks/useGetNumberNotifications";
 import useGetNotificationsSocket from "./hooks/useGetNotificationsSocket";
@@ -27,6 +26,7 @@ import useGetEventsRequestsNotificationsSocket from "./hooks/useGetEventsRequest
 import useIsDesktop from "./hooks/useIsDesktop";
 import useGetNumberUnreadMessages from "./hooks/useGetNumberUnreadMessages";
 import useGetMessagesSocket from "./hooks/useGetMessagesSocket";
+import { selectIsDesktop } from "./redux/slices/uiSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ function App() {
   const token = useSelector(selectCurrentToken);
   const socket = useSelector(selectCurrentSocket);
   const userLoggedIn = useSelector(isLoggedIn);
+  const isDesktop = useSelector(selectIsDesktop);
 
   const { closeDialog, dialogIsActive, dialogDetails } = useContext(dialogContext);
   const { closeSubDialog, subDialogIsActive, subDialogDetails } =
@@ -87,12 +88,45 @@ function App() {
       socket.on("getOnlineUsers", updateOnlineUsers);
     }
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        connectToSocket();
+        socket.on("getOnlineUsers", updateOnlineUsers);
+      }
+    };
+
+    if (!isDesktop && userLoggedIn) {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+    }
+
     return () => {
       if (socket) {
         socket.off("getOnlineUsers", updateOnlineUsers);
       }
+
+      if (!isDesktop && userLoggedIn) {
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      }
     };
-  }, [socket, userData]);
+  }, [isDesktop, socket, userData]);
+
+  // useEffect(() => {
+  //   const connectToSocket = () => {
+  //     socket.emit("newSocketUser", {
+  //       userId: userData.user._id,
+  //       username: userData.user.username,
+  //     });
+  //   };
+
+  //   const updateOnlineUsers = (onlineUsers) => {
+  //     dispatch(setOnlineUsers(onlineUsers));
+  //   };
+
+  //   if (socket && userData) {
+  //     connectToSocket();
+  //     socket.on("getOnlineUsers", updateOnlineUsers);
+  //   }
+  // }, [socket, userData]);
 
   return (
     <S.Container>
