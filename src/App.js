@@ -83,14 +83,12 @@ function App() {
       });
     };
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        connectToSocket();
-      }
+    const handlePageShow = () => {
+      connectToSocket();
     };
 
     if (typeof document !== "undefined" && !isDesktop && userLoggedIn) {
-      document.addEventListener("visibilitychange", handleVisibilityChange);
+      window.addEventListener("pageshow", handlePageShow);
     }
 
     if (socket && userData) {
@@ -98,8 +96,8 @@ function App() {
     }
 
     return () => {
-      if (typeof document !== "undefined") {
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("pageshow", handlePageShow);
       }
 
       if (socket) {
