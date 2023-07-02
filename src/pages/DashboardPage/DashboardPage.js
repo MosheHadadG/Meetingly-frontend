@@ -80,7 +80,7 @@ function DashboardPage() {
                   ).getTime()
               );
               sortedEvents =
-                sortedEventsByDate.length < 3
+                sortedEventsByDate.length < (isDesktop ? 5 : 3)
                   ? sortedEventsByDate.reverse()
                   : sortedEventsByDate;
               break;
@@ -90,7 +90,7 @@ function DashboardPage() {
                 (a, b) => a.userDistanceToEvent - b.userDistanceToEvent
               );
               sortedEvents =
-                sortedEventsByDistance.length < 3
+                sortedEventsByDistance.length < (isDesktop ? 5 : 3)
                   ? sortedEventsByDistance.reverse()
                   : sortedEventsByDistance;
               break;
