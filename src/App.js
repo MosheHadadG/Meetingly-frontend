@@ -83,12 +83,12 @@ function App() {
       });
     };
 
-    const handlePageShow = () => {
+    const handleVisibilityChange = (event) => {
       connectToSocket();
     };
 
     if (typeof document !== "undefined" && !isDesktop && userLoggedIn) {
-      window.addEventListener("pageshow", handlePageShow);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     if (socket && userData) {
@@ -97,7 +97,7 @@ function App() {
 
     return () => {
       if (typeof window !== "undefined") {
-        window.removeEventListener("pageshow", handlePageShow);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
       }
 
       if (socket) {
