@@ -89,14 +89,14 @@ function App() {
       }
     };
 
-    if (typeof document !== "undefined" && userData && socket) {
-      document.addEventListener("visibilitychange", handleVisibilityChange);
+    if (userData && socket && !isDesktop) {
+      window.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     if (socket && userData) {
       connectToSocket();
     }
-  }, [socket, userData]);
+  }, [userData, socket]);
 
   // useEffect(() => {
   //   const connectToSocket = () => {

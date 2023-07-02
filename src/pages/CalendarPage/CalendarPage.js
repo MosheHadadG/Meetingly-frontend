@@ -41,22 +41,6 @@ function CalendarPage() {
       } else {
         return <ScheduleEvents events={undefined} />;
       }
-
-      // return (
-      //   <>
-      //     <EventHeader title={title} imageSrc={imageSrc} />
-      //     <EventDetails
-      //       privacy={privacy}
-      //       date={date}
-      //       time={time}
-      //       place={place}
-      //     />
-      //     <EventDescription description={description} />
-      //     <EventOwner username={username} avatar={avatar} />
-      //     <EventParticipants participantsIds={participants} />
-      //     <EventFooter privacy={privacy} />
-      //   </>
-      // );
     }
   };
   return <S.Container isDesktop={isDesktop}>{renderCalenderWithEvents()}</S.Container>;
