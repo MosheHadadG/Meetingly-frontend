@@ -89,19 +89,13 @@ function App() {
       }
     };
 
-    if (typeof document !== "undefined" && userData) {
+    if (typeof document !== "undefined" && userData && socket) {
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     if (socket && userData) {
       connectToSocket();
     }
-
-    // return () => {
-    //   if (typeof window !== "undefined") {
-    //     document.removeEventListener("visibilitychange", handleVisibilityChange);
-    //   }
-    // };
   }, [socket, userData]);
 
   // useEffect(() => {
