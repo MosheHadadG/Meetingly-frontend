@@ -34,7 +34,6 @@ function App() {
   const token = useSelector(selectCurrentToken);
   const socket = useSelector(selectCurrentSocket);
   const userLoggedIn = useSelector(isLoggedIn);
-  const isDesktop = useSelector(selectIsDesktop);
 
   const { closeDialog, dialogIsActive, dialogDetails } = useContext(dialogContext);
   const { closeSubDialog, subDialogIsActive, subDialogDetails } =
@@ -77,30 +76,20 @@ function App() {
         userId: userData.user._id,
         username: userData.user.username,
       });
-      socket.on("getOnlineUsers", (onlineUsers) => {
-        dispatch(setOnlineUsers(onlineUsers));
-      });
+    };
+
+    const updateOnlineUsers = (onlineUsers) => {
+      dispatch(setOnlineUsers(onlineUsers));
     };
 
     if (socket && userData) {
       connectToSocket();
-    }
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        if (socket && userData) {
-          connectToSocket();
-        }
-      }
-    };
-
-    if (!isDesktop) {
-      document.addEventListener("visibilitychange", handleVisibilityChange);
+      socket.on("getOnlineUsers", updateOnlineUsers);
     }
 
     return () => {
-      if (!isDesktop) {
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (socket) {
+        socket.off("getOnlineUsers", updateOnlineUsers);
       }
     };
   }, [socket, userData]);
