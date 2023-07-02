@@ -77,38 +77,36 @@ function App() {
         userId: userData.user._id,
         username: userData.user.username,
       });
-    };
 
-    const updateOnlineUsers = (onlineUsers) => {
-      dispatch(setOnlineUsers(onlineUsers));
+      socket.on("getOnlineUsers", (onlineUsers) => {
+        dispatch(setOnlineUsers(onlineUsers));
+      });
     };
-
-    if (socket && userData) {
-      connectToSocket();
-      socket.on("getOnlineUsers", updateOnlineUsers);
-    }
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         connectToSocket();
-        socket.on("getOnlineUsers", updateOnlineUsers);
       }
     };
 
-    if (!isDesktop && userLoggedIn) {
+    if (typeof document !== "undefined" && !isDesktop && userLoggedIn) {
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
-    return () => {
-      if (socket) {
-        socket.off("getOnlineUsers", updateOnlineUsers);
-      }
+    if (socket && userData) {
+      connectToSocket();
+    }
 
-      if (!isDesktop && userLoggedIn) {
+    return () => {
+      if (typeof document !== "undefined") {
         document.removeEventListener("visibilitychange", handleVisibilityChange);
       }
+
+      if (socket) {
+        socket.off("getOnlineUsers");
+      }
     };
-  }, [isDesktop, socket, userData]);
+  }, [socket, userData, userLoggedIn, isDesktop]);
 
   // useEffect(() => {
   //   const connectToSocket = () => {
