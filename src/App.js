@@ -84,7 +84,9 @@ function App() {
     };
 
     const handleVisibilityChange = (event) => {
-      connectToSocket();
+      if (document.visibilityState === "visible") {
+        connectToSocket();
+      }
     };
 
     if (typeof document !== "undefined" && !isDesktop && userLoggedIn) {
@@ -98,10 +100,6 @@ function App() {
     return () => {
       if (typeof window !== "undefined") {
         document.removeEventListener("visibilitychange", handleVisibilityChange);
-      }
-
-      if (socket) {
-        socket.off("getOnlineUsers");
       }
     };
   }, [socket, userData, userLoggedIn, isDesktop]);
