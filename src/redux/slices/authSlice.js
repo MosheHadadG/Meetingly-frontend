@@ -52,7 +52,7 @@ const authSlice = createSlice({
     setSocket: (state, action) => {
       state.socket = action.payload;
     },
-    setOnlineUser: (state, action) => {
+    setOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
     },
     setNumberUnreadNotifications: (state, action) => {
@@ -89,7 +89,7 @@ export const {
   setUpdatedUser,
   setUserCoordsLocation,
   setSocket,
-  setOnlineUser,
+  setOnlineUsers,
   setNumberUnreadNotifications,
   setNumberUnreadEventsRequests,
   setUserFavoriteEvents,

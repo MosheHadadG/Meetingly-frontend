@@ -82,10 +82,13 @@ function RegisterForm({ step, setStep }) {
   async function onSubmit(values, actions) {
     if (isUploadAvatarStep()) {
       handleUploadAvatar();
+      actions.setTouched({});
     } else if (isSignUpStep()) {
       userSignUpSendOtp();
+      actions.setTouched({});
     } else if (isLastStep()) {
       userVerifyOtpCode();
+      actions.setTouched({});
     } else {
       handleFormNext();
       actions.setTouched({});

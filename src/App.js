@@ -17,7 +17,7 @@ import {
   selectCurrentSocket,
   setUpdatedUser,
   isLoggedIn,
-  setOnlineUser,
+  setOnlineUsers,
 } from "./redux/slices/authSlice";
 import { useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
 import useGetNumberNotifications from "./hooks/useGetNumberNotifications";
@@ -76,7 +76,7 @@ function App() {
         username: userData.user.username,
       });
       socket.on("getOnlineUsers", (onlineUsers) => {
-        dispatch(setOnlineUser(onlineUsers));
+        dispatch(setOnlineUsers(onlineUsers));
       });
     }
   }, [socket, userData]);

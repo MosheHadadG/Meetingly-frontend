@@ -1,15 +1,17 @@
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick-pnth";
-
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import * as S from "./SliderEvents.styled";
-import CardSkeleton from "../../pages/DashboardPage/components/Card/CardSkeleton";
 import dayjs from "dayjs";
 import CardEvent from "../../pages/DashboardPage/components/Card/Card";
 import { sliderSettings } from "./sliderSetting";
+import CardSkeleton from "../../pages/DashboardPage/components/Card/CardSkeleton";
+
+import Slider from "react-slick-pnth";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import "./ReactSlick.css";
-import { useSelector } from "react-redux";
+import * as S from "./SliderEvents.styled";
+
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
 
 function SliderEvents({ events }) {
@@ -42,6 +44,7 @@ function SliderEvents({ events }) {
 
   function renderCardEvents() {
     const renderedCardEvents = events.map((event) => {
+      console.log(event);
       return (
         <CardEvent
           key={event._id}

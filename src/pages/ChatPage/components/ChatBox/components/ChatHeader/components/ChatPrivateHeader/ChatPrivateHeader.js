@@ -6,9 +6,11 @@ import { Avatar } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import * as S from "../../../../../Conversation/Conversation.styled";
 import { Container } from "../../ChatHeader.styled";
+import { useNavigate } from "react-router-dom";
 
 function ChatPrivateHeader({ isDesktop, handleClick, currentChatData }) {
   const onlineUsers = useSelector(selectOnlineUsers);
+  const navigate = useNavigate();
 
   const isOnline = (currentChatData) => {
     return onlineUsers.find((onlineUser) => onlineUser.userId === currentChatData._id);
@@ -22,7 +24,7 @@ function ChatPrivateHeader({ isDesktop, handleClick, currentChatData }) {
             <ArrowForwardIosIcon />
           </div>
         )}
-        <S.UserContainer>
+        <S.UserContainer onClick={() => navigate(`/profile/${currentChatData.username}`)}>
           <S.AvatarContainer>
             {isOnline(currentChatData) && <S.OnlineDot />}
             <Avatar
