@@ -83,13 +83,13 @@ function App() {
       });
     };
 
-    const handleVisibilityChange = (event) => {
+    const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         connectToSocket();
       }
     };
 
-    if (typeof document !== "undefined" && !isDesktop && userLoggedIn) {
+    if (typeof document !== "undefined" && userData) {
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
@@ -97,12 +97,12 @@ function App() {
       connectToSocket();
     }
 
-    return () => {
-      if (typeof window !== "undefined") {
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
-      }
-    };
-  }, [socket, userData, userLoggedIn, isDesktop]);
+    // return () => {
+    //   if (typeof window !== "undefined") {
+    //     document.removeEventListener("visibilitychange", handleVisibilityChange);
+    //   }
+    // };
+  }, [socket, userData]);
 
   // useEffect(() => {
   //   const connectToSocket = () => {
