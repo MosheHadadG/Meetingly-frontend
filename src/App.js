@@ -87,11 +87,7 @@ function App() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // המשתמש יצא לגמרי מהדפדפן
-        socket.disconnect();
-      } else {
-        // המשתמש חוזר לדפדפן או מחליף בין טאבים
+      if (document.visibilityState === "visible") {
         socket.connect();
         connectToSocket();
       }
@@ -105,12 +101,19 @@ function App() {
     }
 
     return () => {
-      // ניקוי והפסקת האזינה לאירוע visibilitychange בסיום ה־useEffect
       if (!isDesktop) {
         document.removeEventListener("visibilitychange", handleVisibilityChange);
       }
     };
   }, [userData, socket, isDesktop]);
+
+  useEffect(() => {
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, []);
 
   // useEffect(() => {
   //   const connectToSocket = () => {
