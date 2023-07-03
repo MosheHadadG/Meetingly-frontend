@@ -85,32 +85,79 @@ function App() {
       });
     };
 
-    const handleBeforeUnload = () => {
-      socket.disconnect();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && !socket.connected) {
+        connectToSocket();
+      } else if (document.visibilityState === "hidden" && !isTabSwitch) {
+        socket.disconnect();
+      }
     };
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        socket.connect();
-        connectToSocket();
-      }
+    let isTabSwitch = false;
+
+    const handleTabSwitch = () => {
+      isTabSwitch = true;
     };
 
     if (socket && userData) {
       connectToSocket();
       if (!isDesktop) {
-        window.addEventListener("beforeunload", handleBeforeUnload);
-        window.addEventListener("visibilitychange", handleVisibilityChange);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("blur", handleTabSwitch);
+        window.addEventListener("focus", () => {
+          isTabSwitch = false;
+        });
       }
     }
 
     return () => {
-      if (!isDesktop) {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-        window.removeEventListener("visibilitychange", handleVisibilityChange);
-      }
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleTabSwitch);
+      window.removeEventListener("focus", () => {
+        isTabSwitch = false;
+      });
     };
   }, [userData, socket, isDesktop]);
+
+  // useEffect(() => {
+  //   const connectToSocket = () => {
+  //     socket.emit("newSocketUser", {
+  //       userId: userData.user._id,
+  //       username: userData.user.username,
+  //     });
+
+  //     socket.on("getOnlineUsers", (onlineUsers) => {
+  //       dispatch(setOnlineUsers(onlineUsers));
+  //     });
+  //   };
+
+  //   const handleBeforeUnload = () => {
+  //     console.log("before");
+  //     socket.disconnect();
+  //   };
+
+  //   const handleVisibilityChange = () => {
+  //     if (document.visibilityState === "visible") {
+  //       socket.connect();
+  //       connectToSocket();
+  //     }
+  //   };
+
+  //   if (socket && userData) {
+  //     connectToSocket();
+  //     // if (!isDesktop) {
+  //     window.addEventListener("beforeunload", handleBeforeUnload);
+  //     window.addEventListener("visibilitychange", handleVisibilityChange);
+  //     // }
+  //   }
+
+  //   return () => {
+  //     if (!isDesktop) {
+  //       window.removeEventListener("beforeunload", handleBeforeUnload);
+  //       window.removeEventListener("visibilitychange", handleVisibilityChange);
+  //     }
+  //   };
+  // }, [userData, socket, isDesktop]);
 
   // useEffect(() => {
   //   const connectToSocket = () => {
