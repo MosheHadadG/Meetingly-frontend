@@ -50,9 +50,6 @@ function App() {
     }
   );
 
-  let isTabSwitch = useRef(false);
-
-  console.log(isTabSwitch);
   useGetNumberNotifications({ userLoggedIn });
   useGetNumberUnreadMessages({ userLoggedIn });
   useGetNotificationsSocket({ socket, userLoggedIn });
@@ -90,35 +87,28 @@ function App() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
+      if (document.hidden) {
+        // המשתמש יצא לגמרי מהדפדפן
+        socket.disconnect();
+      } else {
+        // המשתמש חוזר לדפדפן או מחליף בין טאבים
         socket.connect();
         connectToSocket();
-      } else if (document.visibilityState === "hidden" && !isTabSwitch.current) {
-        socket.disconnect();
       }
     };
 
-    const handleTabSwitch = () => {
-      isTabSwitch.current = true;
-    };
-
-    if (socket && userData) {
+    if (userData && socket) {
       connectToSocket();
       if (!isDesktop) {
         document.addEventListener("visibilitychange", handleVisibilityChange);
-        window.addEventListener("blur", handleTabSwitch);
-        window.addEventListener("focus", () => {
-          isTabSwitch.current = false;
-        });
       }
     }
 
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("blur", handleTabSwitch);
-      window.removeEventListener("focus", () => {
-        isTabSwitch = false;
-      });
+      // ניקוי והפסקת האזינה לאירוע visibilitychange בסיום ה־useEffect
+      if (!isDesktop) {
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      }
     };
   }, [userData, socket, isDesktop]);
 
@@ -134,29 +124,25 @@ function App() {
   //     });
   //   };
 
-  //   const handleBeforeUnload = () => {
-  //     console.log("before");
-  //     socket.disconnect();
-  //   };
-
   //   const handleVisibilityChange = () => {
   //     if (document.visibilityState === "visible") {
   //       socket.connect();
   //       connectToSocket();
+  //     } else if (document.visibilityState === "hidden") {
+  //       socket.disconnect();
   //     }
   //   };
 
   //   if (socket && userData) {
+
   //     connectToSocket();
-  //     // if (!isDesktop) {
-  //     window.addEventListener("beforeunload", handleBeforeUnload);
-  //     window.addEventListener("visibilitychange", handleVisibilityChange);
-  //     // }
+  //     if (!isDesktop) {
+  //       window.addEventListener("visibilitychange", handleVisibilityChange);
+  //     }
   //   }
 
   //   return () => {
   //     if (!isDesktop) {
-  //       window.removeEventListener("beforeunload", handleBeforeUnload);
   //       window.removeEventListener("visibilitychange", handleVisibilityChange);
   //     }
   //   };
