@@ -44,7 +44,6 @@ function SliderEvents({ events }) {
 
   function renderCardEvents() {
     const renderedCardEvents = events.map((event) => {
-      console.log(event);
       return (
         <CardEvent
           key={event._id}

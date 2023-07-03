@@ -18,6 +18,7 @@ import {
   setUpdatedUser,
   isLoggedIn,
   setOnlineUsers,
+  selectOnlineUsers,
 } from "./redux/slices/authSlice";
 import { useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
 import useGetNumberNotifications from "./hooks/useGetNumberNotifications";
@@ -35,6 +36,7 @@ function App() {
   const socket = useSelector(selectCurrentSocket);
   const userLoggedIn = useSelector(isLoggedIn);
   const isDesktop = useSelector(selectIsDesktop);
+  const onlineUsers = useSelector(selectOnlineUsers);
 
   const { closeDialog, dialogIsActive, dialogDetails } = useContext(dialogContext);
   const { closeSubDialog, subDialogIsActive, subDialogDetails } =
@@ -83,20 +85,33 @@ function App() {
       });
     };
 
+    const handleBeforeUnload = () => {
+      socket.disconnect();
+    };
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         connectToSocket();
+      } else if (document.visibilityState === "hidden") {
+        socket.disconnect();
       }
     };
 
-    if (userData && socket && !isDesktop) {
-      window.addEventListener("visibilitychange", handleVisibilityChange);
-    }
-
     if (socket && userData) {
       connectToSocket();
+      if (!isDesktop) {
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        window.addEventListener("visibilitychange", handleVisibilityChange);
+      }
     }
-  }, [userData, socket]);
+
+    return () => {
+      if (!isDesktop) {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        window.removeEventListener("visibilitychange", handleVisibilityChange);
+      }
+    };
+  }, [userData, socket, isDesktop]);
 
   // useEffect(() => {
   //   const connectToSocket = () => {
