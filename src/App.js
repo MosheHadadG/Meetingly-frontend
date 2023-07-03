@@ -93,22 +93,20 @@ function App() {
       if (document.visibilityState === "visible") {
         socket.connect();
         connectToSocket();
-      } else if (document.visibilityState === "hidden") {
-        socket.disconnect();
       }
     };
 
     if (socket && userData) {
       connectToSocket();
       if (!isDesktop) {
-        window.addEventListener("beforeunload", handleBeforeUnload);
+        // window.addEventListener("beforeunload", handleBeforeUnload);
         window.addEventListener("visibilitychange", handleVisibilityChange);
       }
     }
 
     return () => {
       if (!isDesktop) {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
+        // window.removeEventListener("beforeunload", handleBeforeUnload);
         window.removeEventListener("visibilitychange", handleVisibilityChange);
       }
     };
