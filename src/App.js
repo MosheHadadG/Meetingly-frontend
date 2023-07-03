@@ -107,68 +107,6 @@ function App() {
     };
   }, [userData, socket, isDesktop]);
 
-  useEffect(() => {
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   const connectToSocket = () => {
-  //     socket.emit("newSocketUser", {
-  //       userId: userData.user._id,
-  //       username: userData.user.username,
-  //     });
-
-  //     socket.on("getOnlineUsers", (onlineUsers) => {
-  //       dispatch(setOnlineUsers(onlineUsers));
-  //     });
-  //   };
-
-  //   const handleVisibilityChange = () => {
-  //     if (document.visibilityState === "visible") {
-  //       socket.connect();
-  //       connectToSocket();
-  //     } else if (document.visibilityState === "hidden") {
-  //       socket.disconnect();
-  //     }
-  //   };
-
-  //   if (socket && userData) {
-
-  //     connectToSocket();
-  //     if (!isDesktop) {
-  //       window.addEventListener("visibilitychange", handleVisibilityChange);
-  //     }
-  //   }
-
-  //   return () => {
-  //     if (!isDesktop) {
-  //       window.removeEventListener("visibilitychange", handleVisibilityChange);
-  //     }
-  //   };
-  // }, [userData, socket, isDesktop]);
-
-  // useEffect(() => {
-  //   const connectToSocket = () => {
-  //     socket.emit("newSocketUser", {
-  //       userId: userData.user._id,
-  //       username: userData.user.username,
-  //     });
-  //   };
-
-  //   const updateOnlineUsers = (onlineUsers) => {
-  //     dispatch(setOnlineUsers(onlineUsers));
-  //   };
-
-  //   if (socket && userData) {
-  //     connectToSocket();
-  //     socket.on("getOnlineUsers", updateOnlineUsers);
-  //   }
-  // }, [socket, userData]);
-
   return (
     <S.Container>
       {loadUserIsLoading ? (
