@@ -28,6 +28,7 @@ import useIsDesktop from "./hooks/useIsDesktop";
 import useGetNumberUnreadMessages from "./hooks/useGetNumberUnreadMessages";
 import useGetMessagesSocket from "./hooks/useGetMessagesSocket";
 import { selectIsDesktop } from "./redux/slices/uiSlice";
+import { useRef } from "react";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,6 +50,9 @@ function App() {
     }
   );
 
+  let isTabSwitch = useRef(false);
+
+  console.log(isTabSwitch);
   useGetNumberNotifications({ userLoggedIn });
   useGetNumberUnreadMessages({ userLoggedIn });
   useGetNotificationsSocket({ socket, userLoggedIn });
@@ -89,15 +93,13 @@ function App() {
       if (document.visibilityState === "visible") {
         socket.connect();
         connectToSocket();
-      } else if (document.visibilityState === "hidden" && !isTabSwitch) {
+      } else if (document.visibilityState === "hidden" && !isTabSwitch.current) {
         socket.disconnect();
       }
     };
 
-    let isTabSwitch = false;
-
     const handleTabSwitch = () => {
-      isTabSwitch = true;
+      isTabSwitch.current = true;
     };
 
     if (socket && userData) {
@@ -106,7 +108,7 @@ function App() {
         document.addEventListener("visibilitychange", handleVisibilityChange);
         window.addEventListener("blur", handleTabSwitch);
         window.addEventListener("focus", () => {
-          isTabSwitch = false;
+          isTabSwitch.current = false;
         });
       }
     }
