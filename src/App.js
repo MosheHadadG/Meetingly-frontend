@@ -93,8 +93,6 @@ function App() {
       if (document.visibilityState === "visible") {
         socket.connect();
         connectToSocket();
-      } else if (document.visibilityState === "hidden") {
-        socket.disconnect();
       }
     };
 
