@@ -86,7 +86,8 @@ function App() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible" && !socket.connected) {
+      if (document.visibilityState === "visible") {
+        socket.connect();
         connectToSocket();
       } else if (document.visibilityState === "hidden" && !isTabSwitch) {
         socket.disconnect();
