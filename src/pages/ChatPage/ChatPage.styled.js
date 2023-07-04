@@ -73,7 +73,7 @@ export const ChatMenu = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 20%;
+  /* gap: 20%; */
 `;
 
 export const ChatMenuSpan = styled.span`

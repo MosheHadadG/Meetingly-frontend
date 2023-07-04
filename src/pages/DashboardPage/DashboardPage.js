@@ -6,16 +6,27 @@ import { useNavigate } from "react-router-dom";
 import { INTERESTS } from "../../routes/CONSTANTS";
 import { useGetEventsByTypeQuery } from "../../redux/slices/apiSlices/eventsApiSlice";
 import { INTERESTS_LIST } from "../InterestsPage/utils/utils";
-import { getDistance, getEventName } from "./utils/utils";
+import {
+  filteredEventsByDistance,
+  filteredEventsByTerm,
+  getDistance,
+  getEventName,
+  getSortedEvents,
+} from "./utils/utils";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../redux/slices/authSlice";
 import useGetUserLocation from "./hooks/useGetUserLocation";
 import { userCoordsLocation } from "../../redux/slices/authSlice";
 import RangeDistance from "./components/RangeDistance/RangeDistance";
-import { distanceFromEvent, sortedEvents } from "../../redux/slices/eventsSlice";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  distanceFromEvent,
+  selectSearchTerm,
+  sortedEvents,
+} from "../../redux/slices/eventsSlice";
 import SortEvents from "./components/SortEvents/SortEvents";
-import dayjs from "dayjs";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
+import { useState } from "react";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -24,9 +35,10 @@ function DashboardPage() {
   const userLocation = useSelector(userCoordsLocation);
   const userDistanceRange = useSelector(distanceFromEvent);
   const sortedEventsBy = useSelector(sortedEvents);
+  const searchTerm = useSelector(selectSearchTerm);
 
   const {
-    data: events,
+    data: eventsByType,
     isLoading,
     isSuccess,
     isFetching,
@@ -47,12 +59,12 @@ function DashboardPage() {
         );
       });
     } else if (isSuccess) {
-      return events.map((event, idx) => {
-        if (event) {
-          let eventType = Object.keys(event)[0];
+      return eventsByType.map((eventByType, idx) => {
+        if (eventByType) {
+          let eventType = Object.keys(eventByType)[0];
           let eventName = getEventName(INTERESTS_LIST, eventType);
 
-          const eventsWithUserDistance = event[eventType].map((event) => {
+          const eventsWithUserDistance = eventByType[eventType].map((event) => {
             let userDistanceToEvent = getDistance(
               userLocation ? userLocation : userLoggedIn.cityCoordinates,
               event.location.coordinates
@@ -60,41 +72,20 @@ function DashboardPage() {
             return { ...event, userDistanceToEvent };
           });
 
-          const filteredEventsByDistance = eventsWithUserDistance.filter((event) => {
-            if (event.userDistanceToEvent <= userDistanceRange) {
-              return event;
-            }
+          const eventsByTerm = filteredEventsByTerm({
+            events: eventsWithUserDistance,
+            searchTerm,
+          });
+          const eventsByDistance = filteredEventsByDistance({
+            events: eventsByTerm,
+            userDistanceRange,
           });
 
-          // Sorted Events By
-          let sortedEvents;
-          switch (sortedEventsBy) {
-            case "date":
-              const sortedEventsByDate = [...filteredEventsByDistance].sort(
-                (a, b) =>
-                  new Date(
-                    `${dayjs(a.date).format("YYYY-MM-DD")}T${a.timeStart}`
-                  ).getTime() -
-                  new Date(
-                    `${dayjs(b.date).format("YYYY-MM-DD")}T${b.timeStart}`
-                  ).getTime()
-              );
-              sortedEvents =
-                sortedEventsByDate.length < (isDesktop ? 5 : 3)
-                  ? sortedEventsByDate.reverse()
-                  : sortedEventsByDate;
-              break;
-
-            case "distance":
-              const sortedEventsByDistance = [...filteredEventsByDistance].sort(
-                (a, b) => a.userDistanceToEvent - b.userDistanceToEvent
-              );
-              sortedEvents =
-                sortedEventsByDistance.length < (isDesktop ? 5 : 3)
-                  ? sortedEventsByDistance.reverse()
-                  : sortedEventsByDistance;
-              break;
-          }
+          const sortedEvents = getSortedEvents({
+            events: eventsByDistance,
+            sortedEventsBy,
+            isDesktop,
+          });
 
           return (
             <S.SliderEvents key={idx}>
@@ -123,6 +114,22 @@ function DashboardPage() {
         userLocation={userLocation}
         userLoggedIn={userLoggedIn}
       />
+
+      {/* <S.SearchContainer> */}
+      {/* <SearchIcon /> */}
+
+      {/* <S.SearchInput
+          placeholder="חפש..."
+          type="text"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        /> */}
+      {/* </S.SearchContainer> */}
+
+      {/* <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      /> */}
       <SortEvents isDesktop={isDesktop} sortedEventsBy={sortedEventsBy} />
       <S.Events>{renderEvents()}</S.Events>
     </S.Container>

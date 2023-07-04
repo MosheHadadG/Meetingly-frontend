@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const getEventName = (interestsList, eventType) => {
   const interestObj = interestsList.find((interest) => {
     return eventType.includes(interest.type);
@@ -5,7 +7,12 @@ export const getEventName = (interestsList, eventType) => {
   return interestObj.name;
 };
 
-export function getDistance(coordsUser, coordsEvent) {
+// Converts numeric degrees to radians
+const toRad = (Value) => {
+  return (Value * Math.PI) / 180;
+};
+
+export const getDistance = (coordsUser, coordsEvent) => {
   const { lng: lngUser, lat: latUser } = coordsUser;
   const [lngEvent, latEvent] = coordsEvent;
 
@@ -21,9 +28,44 @@ export function getDistance(coordsUser, coordsEvent) {
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var distanceKm = R * c;
   return distanceKm;
-}
+};
 
-// Converts numeric degrees to radians
-function toRad(Value) {
-  return (Value * Math.PI) / 180;
-}
+export const filteredEventsByTerm = ({ events, searchTerm }) => {
+  return events.filter((event) => {
+    return event.title.includes(searchTerm);
+  });
+};
+
+export const filteredEventsByDistance = ({ events, userDistanceRange }) => {
+  return events.filter((event) => {
+    if (event.userDistanceToEvent <= userDistanceRange) {
+      return event;
+    }
+  });
+};
+
+export const getSortedEvents = ({ events, sortedEventsBy, isDesktop }) => {
+  // Sorted Events By
+
+  switch (sortedEventsBy) {
+    case "date":
+      const sortedEventsByDate = [...events].sort(
+        (a, b) =>
+          new Date(`${dayjs(a.date).format("YYYY-MM-DD")}T${a.timeStart}`).getTime() -
+          new Date(`${dayjs(b.date).format("YYYY-MM-DD")}T${b.timeStart}`).getTime()
+      );
+
+      return sortedEventsByDate.length < (isDesktop ? 5 : 3)
+        ? sortedEventsByDate.reverse()
+        : sortedEventsByDate;
+
+    case "distance":
+      const sortedEventsByDistance = [...events].sort(
+        (a, b) => a.userDistanceToEvent - b.userDistanceToEvent
+      );
+
+      return sortedEventsByDistance.length < (isDesktop ? 5 : 3)
+        ? sortedEventsByDistance.reverse()
+        : sortedEventsByDistance;
+  }
+};

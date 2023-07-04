@@ -5,17 +5,21 @@ import MeetinglyLogo from "../../assets/images/MeetinglyLogo.png";
 import * as S from "./Header.styled";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../redux/slices/authSlice";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { CHAT, DASHBOARD } from "../../routes/CONSTANTS";
 import Avatar from "@mui/material/Avatar";
 import UserMenu from "./components/UserMenu/UserMenu";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import { selectNumberUnreadChatsData } from "../../redux/slices/chatSlice";
+import SearchIcon from "@mui/icons-material/Search";
+import Search from "../Search/Search";
 
 function Header() {
   const user = useSelector(selectCurrentUser);
   const totalUnreadChatsData = useSelector(selectNumberUnreadChatsData);
   const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <S.Container>
       <S.NavBarContainer>
@@ -37,6 +41,12 @@ function Header() {
               <S.Counter>{totalUnreadChatsData?.totalUnreadChats}</S.Counter>
             )}
           </S.ChatIconContainer>
+
+          {location.pathname === "/dashboard" && (
+            <S.ChatIconContainer>
+              <Search />
+            </S.ChatIconContainer>
+          )}
         </S.UserWelcome>
         <S.LogoWrapper>
           <S.Logo onClick={() => navigate(DASHBOARD)} src={MeetinglyLogo} alt="logo" />

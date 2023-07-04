@@ -64,6 +64,7 @@ export const ChatIconContainer = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+
   position: relative;
 `;
 

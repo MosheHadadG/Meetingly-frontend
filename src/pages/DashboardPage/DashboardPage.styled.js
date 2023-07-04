@@ -44,3 +44,27 @@ export const Events = styled.div`
   align-items: center;
   gap: 20px;
 `;
+
+export const SearchContainer = styled.div`
+  width: 60%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const SearchInput = styled.input`
+  width: 100%;
+  padding: 12px 24px;
+  background-color: transparent;
+  transition: transform 250ms ease-in-out;
+  font-size: 14px;
+  line-height: 18px;
+  color: #575756;
+  border-radius: 50px;
+  border: 1px solid #575756;
+
+  &::placeholder {
+    color: color(#575756 a(0.8));
+    letter-spacing: 1.5px;
+  }
+`;

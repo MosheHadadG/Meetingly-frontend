@@ -11,6 +11,8 @@ import { selectIsDesktop } from "../../redux/slices/uiSlice";
 import ChatBox from "./components/ChatBox/ChatBox";
 import ConversationCardSkeleton from "./components/Conversation/ConversationCardSkeleton";
 import Conversation from "./components/Conversation/Conversation";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import * as S from "./ChatPage.styled";
 
 const ChatPage = () => {
@@ -83,12 +85,29 @@ const ChatPage = () => {
         <S.ScrollContainer isDesktop={isDesktop}>
           <S.ChatContainer isDesktop={isDesktop}>
             <S.ChatMenu>
-              <S.ChatMenuSpan onClick={() => handleClickChatMenu(true)}>
-                פרטי
-              </S.ChatMenuSpan>
-              <S.ChatMenuSpan onClick={() => handleClickChatMenu(false)}>
-                קבוצתי
-              </S.ChatMenuSpan>
+              <Tabs
+                value={isPrivateMode ? "private" : "group"}
+                TabIndicatorProps={{
+                  style: {
+                    background: "var(--color-primary-purple)",
+                    fontSize: "1rem !important",
+                  },
+                }}
+                centered
+              >
+                <Tab
+                  sx={{ fontSize: !isDesktop && "1.08rem" }}
+                  value="private"
+                  label="פרטי"
+                  onClick={() => handleClickChatMenu(true)}
+                />
+                <Tab
+                  sx={{ fontSize: !isDesktop && "1.08rem" }}
+                  value="group"
+                  label="קבוצתי"
+                  onClick={() => handleClickChatMenu(false)}
+                />
+              </Tabs>
             </S.ChatMenu>
             {userChats?.status === "NoFound" && (
               <S.NoFoundParagraph>{userChats.statusMessage}</S.NoFoundParagraph>
