@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Wrap = styled.div`
   height: 30px;
+  width: 100%;
   position: relative;
   display: flex;
   align-items: center;
@@ -24,7 +25,7 @@ export const Input = styled.input`
   cursor: pointer;
 
   &:focus {
-    width: ${({ isDesktop }) => (isDesktop ? "200px" : "120px")};
+    width: ${({ isDesktop }) => (isDesktop ? "40%" : "95%")};
     border-bottom: 1px solid #bbb;
     cursor: text;
   }

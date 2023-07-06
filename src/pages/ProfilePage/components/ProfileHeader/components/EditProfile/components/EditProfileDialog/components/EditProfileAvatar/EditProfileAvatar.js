@@ -1,19 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
-import * as S from "./EditProfileAvatar.styled";
-import Spinner from "../../../../../../../../components/Spinner/Spinner";
-import UploadAvatar from "../../../../../../../RegisterPage/components/RegisterForm/components/UploadAvatar/UploadAvatar";
-import { useUpdateEventMutation } from "../../../../../../../../redux/slices/apiSlices/eventsApiSlice";
-import { editEventCoverSchema } from "../../../../../../../../Validations/EditEventValidation";
-import { snackBarContext } from "../../../../../../../../services/contexts/SnackBar";
+import { snackBarContext } from "../../../../../../../../../../services/contexts/SnackBar";
 import {
   useDeleteAvatarImgMutation,
   useUpdateUserMutation,
   useUploadAvatarMutation,
-} from "../../../../../../../../redux/slices/apiSlices/authApiSlice";
-import Button from "../../../../../../../../components/Input/Button/Button";
-import { editProfileAvatarSchema } from "../../../../../../../../Validations/EditProfileValidation";
-import ErrorParagraph from "../../../../../../../../components/Input/ErrorParagraph/ErrorParagraph";
+} from "../../../../../../../../../../redux/slices/apiSlices/authApiSlice";
+import { editProfileAvatarSchema } from "../../../../../../../../../../Validations/EditProfileValidation";
+
+import Button from "../../../../../../../../../../components/Input/Button/Button";
+import UploadAvatar from "../../../../../../../../../RegisterPage/components/RegisterForm/components/UploadAvatar/UploadAvatar";
+
+import * as S from "./EditProfileAvatar.styled";
 
 function EditProfileAvatar({ userProfile, closeSubDialog }) {
   const {
@@ -40,8 +38,6 @@ function EditProfileAvatar({ userProfile, closeSubDialog }) {
   const { openSnackBar } = useContext(snackBarContext);
 
   async function onSubmit() {
-    console.log(editProfileAvatarForm);
-
     if (editProfileAvatarForm.profileAvatarSrc) {
       let path = editProfileAvatarForm.profileAvatarSrc.split("/");
       let fileName = path[path.length - 1];
@@ -63,16 +59,9 @@ function EditProfileAvatar({ userProfile, closeSubDialog }) {
       closeSubDialog();
     } catch (err) {
       console.log(err);
-      //   if (err.status === 400) {
-      //     setErrMsg(err.data.error);
-      //   } else {
-      //     setErrMsg("תקלה בשרתים שלנו");
-      //   }
-      // }
     }
   }
 
-  console.log("here");
   return (
     <S.EditProfileAvatarForm onSubmit={handleSubmit}>
       <UploadAvatar
@@ -85,13 +74,7 @@ function EditProfileAvatar({ userProfile, closeSubDialog }) {
       />
 
       <S.ButtonContainer>
-        <Button
-          text="שמור"
-          color="var(--color-primary-purple)"
-          type="submit"
-
-          // boxShadow
-        />
+        <Button text="שמור" color="var(--color-primary-purple)" type="submit" />
       </S.ButtonContainer>
     </S.EditProfileAvatarForm>
   );

@@ -23,9 +23,7 @@ function AvatarParticipant({
       )}
 
       <Tooltip title={`${participant.firstName} ${participant.lastName} `}>
-        {/* <S.ImgWrapper> */}
         <Avatar sx={{ width: 50, height: 50 }} src={participant.avatar} />
-        {/* </S.ImgWrapper> */}
       </Tooltip>
     </S.Container>
   );

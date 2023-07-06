@@ -1,10 +1,12 @@
 import React from "react";
-import * as S from "./profileHeader.styled";
 import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
-import ProfileBio from "./components/ProfileBio/ProfileBio";
 import CreatePrivateChat from "./components/CreateChat/CreatePrivateChat";
 import { useSelector } from "react-redux";
 import { selectIsDesktop } from "../../../../redux/slices/uiSlice";
+import EditProfile from "./components/EditProfile/EditProfile";
+import Bio from "./components/ProfileBio/Bio";
+
+import * as S from "./profileHeader.styled";
 
 function ProfileHeader({ userProfile, isUserLoggedInProfile }) {
   const isDesktop = useSelector(selectIsDesktop);
@@ -19,11 +21,12 @@ function ProfileHeader({ userProfile, isUserLoggedInProfile }) {
           </S.FullNameParagraph>
         </S.FullNameSpan>
       </S.ProfileAvatarName>
-      <ProfileBio
-        isDesktop={isDesktop}
-        userProfile={userProfile}
-        isUserLoggedInProfile={isUserLoggedInProfile}
-      />
+      <Bio userProfile={userProfile} />
+
+      {isUserLoggedInProfile && (
+        <EditProfile isDesktop={isDesktop} userProfile={userProfile} />
+      )}
+
       {!isUserLoggedInProfile && (
         <CreatePrivateChat isDesktop={isDesktop} userProfile={userProfile} />
       )}

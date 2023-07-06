@@ -10,9 +10,9 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import ErrorParagraph from "../Input/ErrorParagraph/ErrorParagraph";
-import * as S from "./Dialog.styled";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { makeStyles } from "@material-ui/core";
+import * as S from "./Dialog.styled";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -29,9 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
+function BootstrapDialogTitle({ children, onClose, ...other }) {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
@@ -61,7 +59,6 @@ BootstrapDialogTitle.propTypes = {
 export default function CustomizedDialog({
   open,
   closeDialog,
-  // setOpen,
   title,
   content,
   action,
@@ -77,7 +74,7 @@ export default function CustomizedDialog({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const classes = useStyles();
-  console.log({ isFullScreenMobile, isMobile });
+
   return (
     <>
       <BootstrapDialog

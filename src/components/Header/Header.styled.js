@@ -23,7 +23,7 @@ export const NavBarContainer = styled.div`
 `;
 
 export const UserWelcome = styled.div`
-  width: 50%;
+  width: 60%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -64,7 +64,14 @@ export const ChatIconContainer = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  position: relative;
+`;
 
+export const SearchContainer = styled.div`
+  width: 70%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   position: relative;
 `;
 

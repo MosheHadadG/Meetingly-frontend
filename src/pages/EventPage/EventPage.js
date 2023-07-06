@@ -20,7 +20,6 @@ import {
   userAlreadyParticipatingEvent,
   UserLoggedInIsOwnerEvent,
 } from "./utils/eventPage.utils";
-import EventOwnerSubHeader from "./components/EventOwnerSubHeader/components/EventOwnerSubHeader/EventOwnerSubHeader";
 import { selectIsDesktop } from "../../redux/slices/uiSlice";
 import EventSubHeader from "./components/EventOwnerSubHeader/EventSubHeader";
 
@@ -50,7 +49,7 @@ function EventPage() {
         ownerEvent: ownerEventId,
         _id: eventId,
       } = event;
-      const { username, avatar } = eventOwnerDetails;
+
       return (
         <>
           <EventHeader title={title} imageSrc={imageSrc} isDesktop={isDesktop} />
@@ -74,7 +73,7 @@ function EventPage() {
             placeName={location.name}
           />
           <EventDescription description={description} />
-          <EventOwner username={username} avatar={avatar} />
+          <EventOwner eventOwnerDetails={eventOwnerDetails} />
           <EventParticipants participants={participants} />
           {!eventAlreadyOver(date, timeStart) &&
             !UserLoggedInIsOwnerEvent(userLoggedIn._id, ownerEventId) && (

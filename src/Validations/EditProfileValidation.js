@@ -14,11 +14,7 @@ export const editProfileAvatarSchema = yup.object().shape({
 });
 
 export const editProfileBioSchema = yup.object().shape({
-  bio: yup
-    .string()
-    .min(5, "ביוגרפיה צריך להכיל מינימום 5 תווים")
-    .max(200, "ביוגרפיה צריך להכיל מקסימום 200 תווים")
-    .required("הזן ביוגרפיה"),
+  bio: yup.string().max(200, "ביוגרפיה צריך להכיל מקסימום 200 תווים"),
 });
 
 // export const editProfileDetailsSchema = yup.object().shape({

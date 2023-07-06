@@ -43,9 +43,9 @@ function Header() {
           </S.ChatIconContainer>
 
           {location.pathname === "/dashboard" && (
-            <S.ChatIconContainer>
+            <S.SearchContainer>
               <Search />
-            </S.ChatIconContainer>
+            </S.SearchContainer>
           )}
         </S.UserWelcome>
         <S.LogoWrapper>
