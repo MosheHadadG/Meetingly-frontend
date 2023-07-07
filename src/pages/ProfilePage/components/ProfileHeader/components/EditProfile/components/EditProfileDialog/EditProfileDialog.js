@@ -12,8 +12,7 @@ import EditProfileDetails from "./components/EditProfileDetails/EditProfileDetai
 import * as S from "./EditProfileDialog.styled";
 
 function EditProfileDialog({ userProfile }) {
-  const { openSubDialog, closeSubDialog, subDialogDetails, setUpdatedSubDialogContent } =
-    useContext(subDialogContext);
+  const { openSubDialog, closeSubDialog } = useContext(subDialogContext);
 
   return (
     <S.Container>

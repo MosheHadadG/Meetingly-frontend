@@ -10,7 +10,6 @@ import * as S from "./EventParticipatingSubHeader.styled";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectIsDesktop } from "../../../../../../redux/slices/uiSlice";
-import { format } from "date-fns";
 import moment from "moment";
 import dayjs from "dayjs";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useFormik } from "formik";
 import { userLoginSchema } from "../../../../Validations/LoginValidation";
@@ -9,12 +9,7 @@ import Button from "../../../../components/Input/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./LoginForm.styled";
 import { useLoginMutation } from "../../../../redux/slices/apiSlices/authApiSlice";
-import {
-  selectCurrentUser,
-  setCredentials,
-  setSocket,
-  setUpdatedUser,
-} from "../../../../redux/slices/authSlice";
+import { setCredentials, setSocket } from "../../../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { INTERESTS, DASHBOARD } from "../../../../routes/CONSTANTS";
 import { useUpdateUserMutation } from "../../../../redux/slices/apiSlices/authApiSlice";

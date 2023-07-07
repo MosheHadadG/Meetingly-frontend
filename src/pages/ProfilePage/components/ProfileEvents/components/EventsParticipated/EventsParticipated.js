@@ -7,8 +7,6 @@ function EventsParticipated({ isUserLoggedInProfile, firstName, profileId }) {
     data: EventsParticipated,
     isLoading,
     isSuccess,
-    isError,
-    error,
   } = useGetEventsUserParticipatedQuery(profileId);
 
   const renderEventsParticipated = () => {

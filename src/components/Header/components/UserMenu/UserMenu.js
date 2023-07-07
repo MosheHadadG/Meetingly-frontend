@@ -3,14 +3,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useDispatch, useSelector } from "react-redux";
-import { useMarkAsReadAllNotificationsMutation } from "../../../../redux/slices/apiSlices/notificationsApiSlice";
-import {
-  logOut,
-  selectCurrentSocket,
-  setNotificationPage,
-  userLogout,
-} from "../../../../redux/slices/authSlice";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { selectCurrentSocket, userLogout } from "../../../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 import { apiSlice } from "../../../../api/apiSlice";
 
 export default function UserMenu({ username }) {

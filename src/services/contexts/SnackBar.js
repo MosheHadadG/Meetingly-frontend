@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import useSnackBar from "../../hooks/useSnackBar";
 
 export const snackBarContext = createContext();

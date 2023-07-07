@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import { snackBarContext } from "../../../../../../../../../../services/contexts/SnackBar";
 import { useUpdateUserMutation } from "../../../../../../../../../../redux/slices/apiSlices/authApiSlice";
@@ -38,7 +38,7 @@ function EditProfileDetails({ userProfile, closeSubDialog }) {
 
   async function onSubmit() {
     try {
-      const updatedUser = await updateUser(editProfileDetailsForm);
+      await updateUser(editProfileDetailsForm);
 
       openSnackBar("success", `השינויים נשמרו`);
       closeSubDialog();
