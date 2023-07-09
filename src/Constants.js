@@ -1,6 +1,6 @@
 const prod = {
   url: {
-    API_URL: "https://meetingly-backend.onrender.com",
+    API_URL: "http://52.2.170.27/",
     SOCKET_URL: "https://meetingly-socket.onrender.com",
   },
 };
