@@ -18,17 +18,15 @@ import {
   setUpdatedUser,
   isLoggedIn,
   setOnlineUsers,
-  selectOnlineUsers,
 } from "./redux/slices/authSlice";
 import { useLoadUserQuery } from "./redux/slices/apiSlices/authApiSlice";
+import { selectIsDesktop } from "./redux/slices/uiSlice";
 import useGetNumberNotifications from "./hooks/useGetNumberNotifications";
 import useGetNotificationsSocket from "./hooks/useGetNotificationsSocket";
 import useGetEventsRequestsNotificationsSocket from "./hooks/useGetEventsRequestsNotificationsSocket";
 import useIsDesktop from "./hooks/useIsDesktop";
 import useGetNumberUnreadMessages from "./hooks/useGetNumberUnreadMessages";
 import useGetMessagesSocket from "./hooks/useGetMessagesSocket";
-import { selectIsDesktop } from "./redux/slices/uiSlice";
-import { useRef } from "react";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,7 +35,6 @@ function App() {
   const socket = useSelector(selectCurrentSocket);
   const userLoggedIn = useSelector(isLoggedIn);
   const isDesktop = useSelector(selectIsDesktop);
-  const onlineUsers = useSelector(selectOnlineUsers);
 
   const { closeDialog, dialogIsActive, dialogDetails } = useContext(dialogContext);
   const { closeSubDialog, subDialogIsActive, subDialogDetails } =
@@ -125,7 +122,6 @@ function App() {
               action={dialogDetails.dialogAction}
               type={dialogDetails.dialogType}
               isFullScreenMobile={dialogDetails.isFullScreenMobile}
-              // errMsg={errMsg}
             />
           )}
 
@@ -139,7 +135,6 @@ function App() {
               action={subDialogDetails.dialogAction}
               type={subDialogDetails.dialogType}
               isFullScreenMobile={subDialogDetails.isFullScreenMobile}
-              // errMsg={errMsg}
             />
           )}
         </>
