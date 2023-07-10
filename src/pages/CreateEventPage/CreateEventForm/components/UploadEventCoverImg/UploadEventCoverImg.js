@@ -15,6 +15,8 @@ import Button from "../../../../../components/Input/Button/Button";
 import CheckIcon from "@mui/icons-material/Check";
 import { Box, CircularProgress } from "@mui/material";
 import ButtonUploadSave from "./components/ButtonUploadSave/ButtonUploadSave";
+import { useSelector } from "react-redux";
+import { selectIsDesktop } from "../../../../../redux/slices/uiSlice";
 function UploadEventCoverImg({
   formState,
   handleChange,
@@ -31,6 +33,8 @@ function UploadEventCoverImg({
     useUploadEventCoverImgMutation();
 
   const [deleteEventCoverImg] = useDeleteEventCoverImgMutation();
+
+  const isDesktop = useSelector(selectIsDesktop);
 
   useEffect(() => {
     if (formState.coverImgSrc) {
@@ -91,14 +95,12 @@ function UploadEventCoverImg({
   return (
     <>
       <S.Container>
-        <S.EventCoverImgPreview>
-          <S.EventImg
-            src={
-              previewUrl
-                ? previewUrl
-                : "https://meetingly.s3.amazonaws.com/empty_cover-event.jpg"
-            }
-          />
+        <S.EventCoverImgPreview isDesktop={isDesktop}>
+          {previewUrl ? (
+            <S.EventImg isDesktop={isDesktop} src={previewUrl} />
+          ) : (
+            <S.EmptyCoverImg isDesktop={isDesktop} />
+          )}
 
           <ButtonUploadFile
             icon={!previewUrl ? <AddAPhotoIcon /> : <CropOutlinedIcon />}

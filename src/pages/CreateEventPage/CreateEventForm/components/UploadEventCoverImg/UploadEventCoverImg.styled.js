@@ -15,7 +15,7 @@ export const InputWrapper = styled.div`
 
 export const EventCoverImgPreview = styled.div`
   width: 100%;
-  height: 220px;
+  height: ${({ isDesktop }) => (isDesktop ? "280px" : "220px")};
   position: relative;
 `;
 
@@ -23,6 +23,14 @@ export const EventImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: ${({ isDesktop }) => isDesktop && "5px"};
+`;
+
+export const EmptyCoverImg = styled.div`
+  width: 100%;
+  height: 100%;
+  background: #e7e7e7;
+  border-radius: ${({ isDesktop }) => isDesktop && "5px"};
 `;
 
 export const WrapperUploadCoverButton = styled.div`
