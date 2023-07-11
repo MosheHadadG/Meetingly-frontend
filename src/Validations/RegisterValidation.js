@@ -1,4 +1,5 @@
 import * as yup from "yup";
+const FILE_SIZE = 5000000;
 
 export const userSchemaPersonalInfo = yup.object().shape({
   firstName: yup.string().required("הזן שם פרטי"),
@@ -9,7 +10,14 @@ export const userSchemaPersonalInfo = yup.object().shape({
 });
 
 export const userSchemaUploadAvatar = yup.object().shape({
-  avatarFile: yup.mixed().required("העלה תמונת פרופיל"),
+  avatarFile: yup
+    .mixed()
+    .required("העלה תמונת פרופיל")
+    .test(
+      "fileSize",
+      "גודל התמונה צריך להיות עד 5MB",
+      (value) => value && value.size <= FILE_SIZE
+    ),
 });
 
 export const userSchemaSignUpInfo = yup.object().shape({

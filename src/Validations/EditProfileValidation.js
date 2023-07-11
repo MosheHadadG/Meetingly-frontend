@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const FILE_SIZE = 1000000;
+const FILE_SIZE = 5000000;
 
 export const editProfileAvatarSchema = yup.object().shape({
   avatarFile: yup
@@ -8,7 +8,7 @@ export const editProfileAvatarSchema = yup.object().shape({
     .required("העלה תמונת פרופיל")
     .test(
       "fileSize",
-      "גודל התמונה צריך להיות עד 1MB",
+      "גודל התמונה צריך להיות עד 5MB",
       (value) => value && value.size <= FILE_SIZE
     ),
 });

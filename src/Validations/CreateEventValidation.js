@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import moment from "moment";
 import * as yup from "yup";
 
-const FILE_SIZE = 1000000;
+const FILE_SIZE = 5000000;
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
@@ -12,7 +12,7 @@ export const createEventSchema = yup.object().shape({
     .required("העלה תמונת נושא")
     .test(
       "fileSize",
-      "גודל התמונה צריך להיות עד 1MB",
+      "גודל התמונה צריך להיות עד 5MB",
       (value) => value && value.size <= FILE_SIZE
     ),
   coverImgSrc: yup.string().required("שמור את תמונת הנושא"),
