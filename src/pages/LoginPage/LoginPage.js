@@ -26,7 +26,7 @@ function LoginPage() {
       </S.LoginFormContainer>
 
       <S.LoginPageFooter>
-        <Paragraph
+        {/* <Paragraph
           handleClick={() => navigate(PASSWORD_REST)}
           margin="0 0 50px 0"
           text="שכחתי סיסמה"
@@ -34,7 +34,7 @@ function LoginPage() {
           fontColor={"#47434d"}
           fontSize={"1.1rem"}
           icon={<ChevronLeftIcon />}
-        />
+        /> */}
 
         <Paragraph text="עדיין אין לך חשבון?" fontSize={"1.2rem"} fontColor={"#47434d"} />
         <Button
