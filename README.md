@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+# Welcome to Meetingly
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Description
 
-## Available Scripts
+In the project I have developed, I created an application that allows users to search for and connect with partners for shared activities. The application provides a user-friendly interface that enables users to create new events, add photos, descriptions, and additional details. Users can also filter events based on interests, geographic distance, or search events using the search bar.
 
-In the project directory, you can run:
+The events in the application can be public or private. Public events are open for anyone to join without requiring approval from the event initiator, while private events require approval from the event initiator to join.
 
-### `npm start`
+The application includes a chat system that allows users to communicate efficiently and in real-time. The group chat feature enables users who have joined the same event to communicate with all other participants. The private chat feature allows users to communicate privately with each other.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Additionally, there is a notification system that provides real-time updates to users about events they initiated (such as event cancellations or joining requests) and events they received joining requests for. The application also includes a calendar that displays focused information about the events users have joined, including dates, start and end times.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The application provides a platform for event management and communication, allowing users to create, find, and participate in events in a convenient and efficient manner.
 
-### `npm test`
+## Technologies Used
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### The technologies I used in the project include:
 
-### `npm run build`
+- React
+- Redux Toolkit
+- MongoDB
+- Node.js
+- Express.js
+- Socket.IO
+- JWT (JSON Web Tokens)
+- bcrypt
+- S3
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Repos
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [Backend Repository](https://github.com/MosheHadadG/Meetingly-backend)
+- [Socket Repository](https://github.com/MosheHadadG/Meetingly-socket)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Website Link
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Meetingly](https://meetingly.netlify.app/)
